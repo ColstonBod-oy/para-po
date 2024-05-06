@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AuthInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/blue_5</item>
+    </style>
+
+    <style name="CustomTheme" parent="Theme.ParaPo">
+        <item name="mapboxSearchSdkTheme">@style/CustomSearchSdkTheme</item>
+    </style>
+
+    <style name="CustomSearchSdkTheme" parent="">
+        <item name="mapboxSearchSdkPrimaryTextColor">#353435</item>
+        <item name="mapboxSearchSdkPrimaryTextInactiveColor">#BFBDBF</item>
+        <item name="mapboxSearchSdkPrimaryAccentColor">#0075FF</item>
+        <item name="mapboxSearchSdkOnPrimaryAccentColor">#F3FEFF</item>
+        <item name="mapboxSearchSdkDistanceColor">#A3B3C5</item>
+        <item name="mapboxSearchSdkIconTintColor">#353435</item>
+        <item name="mapboxSearchSdkBackgroundColor">#FFFFFF</item>
+        <item name="mapboxSearchSdkBackgroundSecondaryColor">#0075FF</item>
+        <item name="mapboxSearchSdkPopulateArrowColor">#F3FEFF</item>
+        <item name="mapboxSearchSdkProgressColor">#353435</item>
+        <item name="mapboxSearchSdkErrorIconColor">#353435</item>
+    </style>
+
+    <!-- Default theme -->
+    <style name="AppTheme.Default" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_default</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_default</item>
+        <item name="colorAccent">@color/colorAccent_default</item>
+    </style>
+</resources>

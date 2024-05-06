@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Para Po!</string>
+    <string name="forgot_password_msg">Don\'t worry! it happens. Please enter the email address associated with your account.</string>
+    <string name="on_submit_msg">Check out your mailbox, you will receive an email containing link where you can reset your password</string>
+    <string name="desc">Test</string>
+    <string name="default_web_client_id">279159136392-bjacni2m22smrrrgju6laftbjmrflgoh.apps.googleusercontent.com</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">previous</string>
+    <string name="lorem_ipsum">lorem ipsum</string>
+    <string name="next">next</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_map">Map</string>
+    <string name="no_internet_message">Route drawing not possible because there\'s no internet connection!</string>
+    <string name="failure_to_retrieve">Failure to retrieve the navigation route!</string>
+
+    <string name="query_hint">Where to?</string>
+    <string name="failure_to_load_file">Failure to load the local file of locations. Please try reloading the app.</string>
+
+    <!-- Single card -->
+    <string name="drop_off">Drop off points</string>
+    <string name="fare">Fare</string>
+    <string name="distance">mi</string>
+</resources>
