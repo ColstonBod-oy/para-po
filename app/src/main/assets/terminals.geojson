@@ -1,0 +1,1317 @@
+﻿{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lourdes Hill Terminal",
+        "destinations": "Guisad, Quezon Hill",
+        "fare": "₱20.0",
+        "drop-off": "Dominican Hill Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59420532566858,
+          16.41468361582583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Green Valley Terminal",
+        "destinations": "Balacbac, Irisan, Tuba",
+        "fare": "₱16.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59349299718244,
+          16.413453662853282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bakakeng Terminal",
+        "destinations": "Bakakeng, Kias, Scout Barrio",
+        "fare": "₱16.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59492046593972,
+          16.41317560516636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp 1 Terminal",
+        "destinations": "Camp 1",
+        "fare": "₱12.0",
+        "drop-off": "Governor Pack Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59861074968461,
+          16.410069098739527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mines View Terminal",
+        "destinations": "Mines View",
+        "fare": "₱12.0",
+        "drop-off": "Governor Pack Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59824330755919,
+          16.40926792989083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Scout Barrio Terminal",
+        "destinations": "Scout Bario",
+        "fare": "₱12.0",
+        "drop-off": "Governor Pack Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59824463941828,
+          16.409327977563578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Itogon Terminal",
+        "destinations": "Itogon",
+        "fare": "₱12.0",
+        "drop-off": "Governor Pack Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59824463941828,
+          16.409396968484657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PMA Kias Terminal",
+        "destinations": "PMA Kias",
+        "fare": "₱12.0",
+        "drop-off": "Governor Pack Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59824193568312,
+          16.40945239851125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp 7 Terminal",
+        "destinations": "Camp 7",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5966065826309,
+          16.411883797967718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maria Basa Terminal",
+        "destinations": "Maria Basa",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59666828664183,
+          16.411995947229798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pacdal Liteng Terminal",
+        "destinations": "Pacdal Liteng",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59678195192544,
+          16.412062925230202
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Loakan Terminal",
+        "destinations": "Loakan",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59693796123452,
+          16.41221000041716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Navy Base Terminal",
+        "destinations": "Navy Base",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59700914530515,
+          16.412273203934973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maria Basa Terminal",
+        "destinations": "Maria Basa",
+        "fare": "₱12.0",
+        "drop-off": "T. Claudio St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59712196786131,
+          16.412233805810416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PNR & Hillside Terminal",
+        "destinations": "PNR/Hillside",
+        "fare": "₱12.0",
+        "drop-off": "Diego Silang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5962419431554,
+          16.412841943000586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dagsian Terminal",
+        "destinations": "Dagsian",
+        "fare": "₱12.0",
+        "drop-off": "Diego Silang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59660867799943,
+          16.412460454334038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp 8/San Vicente/Poliwes Terminal",
+        "destinations": "Camp 8/San Vicente/Poliwes",
+        "fare": "₱12.0",
+        "drop-off": "Diego Silang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59644581684012,
+          16.41253620046919
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PMA Kias Terminal",
+        "destinations": "PMA Kias",
+        "fare": "₱12.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5943495652117,
+          16.412503601557674
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Scout Barrio Terminal",
+        "destinations": "Scout Bario",
+        "fare": "₱12.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59450163069249,
+          16.412651381521144
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Greenwater Terminal",
+        "destinations": "Greenwater",
+        "fare": "₱12.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5945760613838,
+          16.412726099622972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Campo Sioco Terminal",
+        "destinations": "Campo Sioco",
+        "fare": "₱12.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59479417770638,
+          16.41293751642094
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gabriela Silang Terminal",
+        "destinations": "Gabriela Silang",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59443407344605,
+          16.41266946495155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Military Cut-off Terminal",
+        "destinations": "Military Cut-off",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59439480193618,
+          16.41270812542355
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Crystal Cave Terminal",
+        "destinations": "Crystal Cave",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59405011300925,
+          16.412969384696837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "City Camp District Terminal",
+        "destinations": "City Camp",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5940162380482,
+          16.413116739604106
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kitma Terminal",
+        "destinations": "Kitma",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5935716507027,
+          16.413069288716684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Irisan Terminal",
+        "destinations": "Irisan",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5934496117028,
+          16.412974451697366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bengao Terminal",
+        "destinations": "Bengao",
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59337832798553,
+          16.41317710557641
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp Dangwa Terminal",
+        "destinations": "Camp Dangwa",
+        "fare": "₱12.0",
+        "drop-off": "Fernando G. Bautista Drive, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59224772277162,
+          16.41330919974422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Green Valley Sitio Saddle Cabuyao Terminal",
+        "destinations": "Green Valley Sitio Saddle Cabuyao",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59352519397419,
+          16.413269020962105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Badiwan Terminal",
+        "destinations": "Badiwan",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59352430733719,
+          16.413311748653342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Green Valley Terminal",
+        "destinations": "Green Valley",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59352504137314,
+          16.41335892479988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Apugan Terminal",
+        "destinations": "Apugan",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59352305006297,
+          16.413398119240412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Balacbac Terminal",
+        "destinations": "Balacbac",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59350737348535,
+          16.41363279400045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pinsao Pilot Project Terminal",
+        "destinations": "Pinsao Pilot Project",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5928763708593,
+          16.414582682792656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "San Roque San Luis Terminal",
+        "destinations": "San Roque San Luis",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59301139778836,
+          16.414506026005384
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Saint Patrick NPC Terminal",
+        "destinations": "Saint Patrick NPC",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59307073149665,
+          16.41468461953859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "San Carlos Heights Terminal",
+        "destinations": "San Carlos Heights",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59321678102918,
+          16.414680654535303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tam-Awan Terminal",
+        "destinations": "Tam-Awan",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5935687314194,
+          16.41464942848306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Quezon Hill Terminal",
+        "destinations": "Quezon Hill",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59357486641358,
+          16.41484055992892
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Long Long Terminal",
+        "destinations": "Long Long",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59276199463801,
+          16.414552717932537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "San Carlos Terminal",
+        "destinations": "San Carlos",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5932828304351,
+          16.414609449933252
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fairview Terminal",
+        "destinations": "Fairview",
+        "fare": "₱12.0",
+        "drop-off": "Upper Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.593773141057,
+          16.414505136241402
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tacay Tam-Awan Terminal",
+        "destinations": "Tacay Tam-Awan",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59341174655219,
+          16.41436018890127
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Quezon Hill Extension Terminal",
+        "destinations": "Quezon Hill Extension",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.593414043618,
+          16.41423903880515
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Upper Quezon Hill Terminal",
+        "destinations": "Upper Quezon Hill",
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59341256875081,
+          16.414114551866305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Aurora Hill Terminal",
+        "destinations": "Aurora Hill",
+        "fare": "₱12.0",
+        "drop-off": "Magsaysay Avenue, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5955916179962,
+          16.414135469119202
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trancoville Terminal",
+        "destinations": "Trancoville",
+        "fare": "₱12.0",
+        "drop-off": "Magsaysay Avenue, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59561787616593,
+          16.414268450812273
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Guisad Terminal",
+        "destinations": "Guisad Dominican",
+        "fare": "₱12.0",
+        "drop-off": "Lower Kayang St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59411115668269,
+          16.414507357221794
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beckel Terminal",
+        "destinations": "Beckel",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59603866743441,
+          16.41549837786532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Itogon/Sangilo Terminal",
+        "destinations": "Itogon/Sangilo",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5962824016026,
+          16.415406968457717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tuding Terminal",
+        "destinations": "Tuding",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5962824016026,
+          16.415406968457717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ucab/Keystone Terminal",
+        "destinations": "Ucab/Keystone",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59650975237577,
+          16.415346248224523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ampucao Terminal",
+        "destinations": "Ampucao",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5965829263917,
+          16.41532619356083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Loakan Antamok Terminal",
+        "destinations": "Loakan Antamok",
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59668101381192,
+          16.415298843364724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Atok Mines Terminal",
+        "destinations": "Atok Mines", 
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5967716102117,
+          16.41527154673227
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mines View Carantes Terminal",
+        "destinations": "Mines View Carantes", 
+        "fare": "₱12.0",
+        "drop-off": "Lakandula St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59595353441938,
+          16.41547305450807
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp 3 Terminal",
+        "destinations": "Camp 3", 
+        "fare": "₱12.0",
+        "drop-off": "Kalantiao St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59696500872735,
+          16.415992590482503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sablan Terminal",
+        "destinations": "Sablan", 
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59244308923002,
+          16.412573667407017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Asin Road Terminal",
+        "destinations": "Asin Road", 
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59226733426812,
+          16.412195980150017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nangalisan Terminal",
+        "destinations": "Nangalisan", 
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59225743354096,
+          16.41211301474445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Agoo Terminal",
+        "destinations": "Agoo", 
+        "fare": "₱12.0",
+        "drop-off": "Otek St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59227033718071,
+          16.411679290222523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tuba Terminal",
+        "destinations": "Tuba", 
+        "fare": "₱12.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59350276475686,
+          16.413564389831933
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Brookside Terminal",
+        "destinations": "Brookside", 
+        "fare": "₱12.0",
+        "drop-off": "Dagohoy St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59643925476354,
+          16.41696589723469
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ambiong Terminal",
+        "destinations": "Ambiong", 
+        "fare": "₱12.0",
+        "drop-off": "Dagohoy St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59666850293473,
+          16.416744505848683
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Holyghost/Honeymoon Terminal",
+        "destinations": "Holyghost/Honeymoon", 
+        "fare": "₱12.0",
+        "drop-off": "Dagohoy St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59663491960339,
+          16.416641973576745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PNR-Hillside Terminal",
+        "destinations": "PNR-Hillside", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60272947767044,
+          16.40536421862251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Philex Mines Terminal",
+        "destinations": "Philex Mines", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60270918339899,
+          16.405244828778066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rosario/Camp 1 Terminal",
+        "destinations": "Rosario/Camp 1", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60268729080576,
+          16.40517657452959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Camp 6 Terminal",
+        "destinations": "Camp 6", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60268152853217,
+          16.405134144800428
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dalicno Terminal",
+        "destinations": "Dalicno", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60267798626859,
+          16.40512392340915
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Acupan Terminal",
+        "destinations": "Acupan", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.6026756046449,
+          16.405118283245002
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ampucao Terminal",
+        "destinations": "Ampucao", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60266881581924,
+          16.405108979752512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Samoyao Terminal",
+        "destinations": "Samoyao", 
+        "fare": "₱12.0",
+        "drop-off": "Marcoville St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60266196932571,
+          16.405078023582547
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beckel Terminal",
+        "destinations": "Beckel", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60141975461539,
+          16.412600343841802
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sangilo Terminal",
+        "destinations": "Sangilo", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60139114678594,
+          16.41262543377327
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tuding Terminal",
+        "destinations": "Tuding", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60136090422196,
+          16.4126489555818
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sabkil Terminal",
+        "destinations": "Sabkil", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60133801828994,
+          16.412667013337213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Loakan Terminal",
+        "destinations": "Loakan", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.6013143146584,
+          16.41268347859969
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ucab Terminal",
+        "destinations": "Ucab", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60129388049444,
+          16.412697591680768
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Antamok Terminal",
+        "destinations": "Antamok", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.6012742636957,
+          16.41271405694073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gumatdang Terminal",
+        "destinations": "Gumatdang", 
+        "fare": "₱12.0",
+        "drop-off": "Happy Queen Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60125219479869,
+          16.41273209031894
+        ]
+      }
+    }
+  ]
+}
