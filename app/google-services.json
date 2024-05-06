@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "279159136392",
+    "project_id": "para-po-8c30e",
+    "storage_bucket": "para-po-8c30e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279159136392:android:de421bafc202c7ea603f3d",
+        "android_client_info": {
+          "package_name": "com.enigma.parapo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279159136392-bjacni2m22smrrrgju6laftbjmrflgoh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enigma.parapo",
+            "certificate_hash": "bee4ce472689611938c63662d2732c87ed3c8069"
+          }
+        },
+        {
+          "client_id": "279159136392-q9i47n0k5c1brb3b4447mnm9o9ouk2rv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enigma.parapo",
+            "certificate_hash": "999bddee66df4c07dcd522ca6f454c1a7aca7914"
+          }
+        },
+        {
+          "client_id": "279159136392-erjg0kaipoqa36i2iet21uhekpeoqrm2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3aGizpFbRuqeHjfvUs5O6PNbxkjPnVRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279159136392-erjg0kaipoqa36i2iet21uhekpeoqrm2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

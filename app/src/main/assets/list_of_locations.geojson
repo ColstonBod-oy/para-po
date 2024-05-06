@@ -1,0 +1,53 @@
+﻿{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Lourdes Hill Terminal",
+        "destinations": "Guisad, Quezon Hill",
+        "fare": "₱20.0",
+        "drop-off": "Dominican Hill Rd, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59420532566858,
+          16.41468361582583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Green Valley Terminal",
+        "destinations": "Balacbac, Irisan, Tuba",
+        "fare": "₱16.0",
+        "drop-off": "Shagem St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59349299718244,
+          16.413453662853282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bakakeng Terminal",
+        "destinations": "Bakakeng, Kias, Scout Barrio",
+        "fare": "₱16.0",
+        "drop-off": "Perfecto St, Baguio, Benguet"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.59492046593972,
+          16.41317560516636
+        ]
+      }
+    }
+  ]
+}

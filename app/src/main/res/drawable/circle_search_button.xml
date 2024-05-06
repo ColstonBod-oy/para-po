@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Circular background shape -->
+    <item android:drawable="@drawable/circle_search_background" />
+
+    <!-- Icon (adjust padding as needed) -->
+    <item
+        android:drawable="@android:drawable/ic_menu_search"
+        android:gravity="center" />
+</layer-list>
