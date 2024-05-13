@@ -852,7 +852,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         // TODO: Replace mockLocation with getDeviceLocation
         val mockLocation = Point.fromLngLat(120.59270718466132, 16.418361457286892)
         val routeOptions: RouteOptions =
-            RouteOptions.builder().layers("navigation-route-layer-id").applyDefaultNavigationOptions()
+            RouteOptions.builder().applyDefaultNavigationOptions()
                 .profile(DirectionsCriteria.PROFILE_WALKING)
                 .coordinatesList(listOf(mockLocation, destinationMarker)).build()
 
