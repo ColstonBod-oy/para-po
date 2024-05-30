@@ -282,11 +282,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         // Add a boolean property to use for adjusting the icon of the selected terminal location
                         singleLocation.addBooleanProperty(PROPERTY_SELECTED, false)
 
-                        // Get the single location's LatLng coordinates
+                        // Get the single location's LngLat coordinates
                         val singleLocationPosition = singleLocation.geometry() as Point?
 
-                        // Create a new LatLng object with the Position object created above
-                        val singleLocationLatLng = Point.fromLngLat(
+                        // Create a new LngLat object with the Position object created above
+                        val singleLocationLngLat = Point.fromLngLat(
                             singleLocationPosition!!.longitude(),
                             singleLocationPosition.latitude()
                         )
@@ -298,7 +298,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 singleLocationDescription,
                                 singleLocationDropOff,
                                 singleLocationFare,
-                                singleLocationLatLng
+                                singleLocationLngLat
                             )
                         )
 
