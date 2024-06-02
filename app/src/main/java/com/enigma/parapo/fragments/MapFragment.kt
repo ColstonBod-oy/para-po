@@ -590,7 +590,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 // but doesn't have its own card in the actual recyclerview.
                                 Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT).show()
                                 locationsRecyclerView.visibility = View.VISIBLE
-                                locationsRecyclerView.smoothScrollToPosition(x)
+
+                                // Removed smooth scrolling when initially displaying the card for a
+                                // tapped terminal to prevent overly long scroll durations
+                                // locationsRecyclerView.smoothScrollToPosition(x)
+                                locationsRecyclerView.scrollToPosition(x)
 
                                 // Reposition the map camera target to the selected marker
                                 repositionMapCamera(selectedFeaturePoint)
