@@ -861,7 +861,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 .coordinatesList(listOf(mockLocation, destinationMarker)).build()
 
         val directionsApiClient: MapboxDirections =
-            MapboxDirections.builder().routeOptions(routeOptions).accessToken(R.string.mapbox_access_token.toString())
+            MapboxDirections.builder().routeOptions(routeOptions).accessToken(getString(R.string.mapbox_access_token))
                 .build()
 
         directionsApiClient.enqueueCall(object : Callback<DirectionsResponse?> {
