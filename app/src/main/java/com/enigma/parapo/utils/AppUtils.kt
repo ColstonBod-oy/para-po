@@ -6,10 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.common.location.LocationProvider
 import com.mapbox.geojson.Point
+import com.mapbox.maps.Style
 import com.mapbox.search.common.DistanceCalculator
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.ui.view.place.SearchPlace
@@ -28,7 +30,11 @@ fun LocationProvider.lastKnownLocation(context: Context, callback: (Point?) -> U
     }
 }
 
-fun LocationProvider.userDistanceTo(context: Context, destination: Point, callback: (Double?) -> Unit) {
+fun LocationProvider.userDistanceTo(
+    context: Context,
+    destination: Point,
+    callback: (Double?) -> Unit
+) {
     lastKnownLocation(context) { location ->
         if (location == null) {
             callback(null)
@@ -49,7 +55,10 @@ fun dpToPx(dp: Int): Int {
 }
 
 fun geoIntent(point: Point): Intent {
-    return Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=${point.latitude()}, ${point.longitude()}"))
+    return Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("geo:0,0?q=${point.latitude()}, ${point.longitude()}")
+    )
 }
 
 fun shareIntent(searchPlace: SearchPlace): Intent {
@@ -61,5 +70,15 @@ fun shareIntent(searchPlace: SearchPlace): Intent {
         action = Intent.ACTION_SEND
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, text)
+    }
+}
+
+fun enumerateMapLayers(style: Style?) {
+    if (style != null) {
+        style.styleLayers.forEach {
+            Log.d("MapboxLayer", it.id)
+        }
+    } else {
+        Log.e("MapboxLayer", "enumerateMapLayers: Style isn't ready yet.")
     }
 }

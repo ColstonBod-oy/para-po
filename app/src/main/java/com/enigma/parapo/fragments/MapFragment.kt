@@ -261,6 +261,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 // Set up the LineLayer which will show the navigation route line to a particular terminal location
                 initNavigationPolylineLineLayer()
 
+                // Logs all the map layers
+                enumerateMapLayers(mapboxMap.style)
+
                 // Create a list of features from the feature collection
                 val featureList: List<Feature>? = featureCollection.features()
 
@@ -338,7 +341,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         mapboxNavigation = MapboxNavigationApp.current()
 
         // Set up a location request
-        val locationRequest = LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 10000).build()
+        val locationRequest =
+            LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 10000).build()
 
         // Get current location settings
         val builder = LocationSettingsRequest.Builder()
@@ -568,7 +572,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         ) { features ->
             if (!features.value?.isEmpty()!!) {
                 //val name = features[0].getStringProperty("name")
-                val name = features.value?.get(0)?.queriedFeature?.feature?.getStringProperty("name")
+                val name =
+                    features.value?.get(0)?.queriedFeature?.feature?.getStringProperty("name")
                 val featureList = featureCollection.features()
                 for (i in featureList!!.indices) {
                     if (featureList[i].getStringProperty("name").equals(name)) {
@@ -588,7 +593,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 // Show the location cards and scroll the recyclerview to the selected marker's card.
                                 // It's "x-1" below because the mock device location marker is part of the marker list
                                 // but doesn't have its own card in the actual recyclerview.
-                                Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
+                                    .show()
                                 locationsRecyclerView.visibility = View.VISIBLE
 
                                 // Removed smooth scrolling when initially displaying the card for a
@@ -602,9 +608,17 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 // Check for an internet connection before making the call to Mapbox Directions API
                                 if (deviceHasInternetConnection()) {
                                     // Start call to the Mapbox Directions API
-                                    getInformationFromDirectionsApi(selectedFeaturePoint, true, null)
+                                    getInformationFromDirectionsApi(
+                                        selectedFeaturePoint,
+                                        true,
+                                        null
+                                    )
                                 } else {
-                                    Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
+                                    Toast.makeText(
+                                        activity,
+                                        R.string.no_internet_message,
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                             }
                         }
@@ -648,7 +662,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     //TODO: Use this!
     private fun removeTerminalLocationLayer() {
         // TODO: add comment
-        val terminalLocationLayer: Layer? = mapView.mapboxMap.style?.getLayerAs("terminal-location-layer-id")
+        val terminalLocationLayer: Layer? =
+            mapView.mapboxMap.style?.getLayerAs("terminal-location-layer-id")
         if (terminalLocationLayer != null) {
             mapView.mapboxMap.style?.removeStyleLayer("terminal-location-layer-id")
         }
@@ -850,7 +865,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         destinationPoint: Point,
         fromMarkerClick: Boolean, @Nullable listIndex: Int?
     ) {
-        val destinationMarker = Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude())
+        val destinationMarker =
+            Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude())
 
         // Initialize the directionsApiClient object for eventually drawing a navigation route on the map
         // TODO: Replace mockLocation with getDeviceLocation
@@ -861,14 +877,21 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 .coordinatesList(listOf(mockLocation, destinationMarker)).build()
 
         val directionsApiClient: MapboxDirections =
-            MapboxDirections.builder().routeOptions(routeOptions).accessToken(getString(R.string.mapbox_access_token))
+            MapboxDirections.builder().routeOptions(routeOptions)
+                .accessToken(getString(R.string.mapbox_access_token))
                 .build()
 
         directionsApiClient.enqueueCall(object : Callback<DirectionsResponse?> {
-            override fun onResponse(call: Call<DirectionsResponse?>, response: Response<DirectionsResponse?>) {
+            override fun onResponse(
+                call: Call<DirectionsResponse?>,
+                response: Response<DirectionsResponse?>
+            ) {
                 // Check that the response isn't null and that the response has a route
                 if (response.body() == null) {
-                    Log.e("MapFragment", "No routes found, make sure you set the right user and access token.")
+                    Log.e(
+                        "MapFragment",
+                        "No routes found, make sure you set the right user and access token."
+                    )
                 } else if (response.body()!!.routes().size < 1) {
                     Log.e("MapFragment", "No routes found")
                 } else {
@@ -888,7 +911,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
                         // Set the distance for each location object in the list of locations
                         if (listIndex != null) {
-                            listOfIndividualLocations[listIndex].distance = finalConvertedFormattedDistance
+                            listOfIndividualLocations[listIndex].distance =
+                                finalConvertedFormattedDistance
                             // Refresh the displayed recyclerview when the location's distance is set
                             styleRvAdapter.notifyDataSetChanged()
                         }
@@ -923,10 +947,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         mapView.mapboxMap.setCamera(CameraOptions.Builder().center(newTarget).build())
 
         mapView.camera.apply {
-            val bearing = createBearingAnimator(cameraAnimatorOptions(18.0, 20.0) { startValue(15.0) }) {
-                duration = 8500
-                interpolator = AnticipateOvershootInterpolator()
-            }
+            val bearing =
+                createBearingAnimator(cameraAnimatorOptions(18.0, 20.0) { startValue(15.0) }) {
+                    duration = 8500
+                    interpolator = AnticipateOvershootInterpolator()
+                }
             val pitch = createPitchAnimator(cameraAnimatorOptions(30.0) { startValue(15.0) }) {
                 duration = 2000
             }
@@ -982,7 +1007,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 lineWidth(NAVIGATION_LINE_WIDTH)
             }
 
-            style.addLayerBelow(navigationRouteLineLayer, "terminal-location-layer-id")
+            style.addLayerBelow(navigationRouteLineLayer, "mapbox-location-indicator-layer")
         } else {
             Log.d(
                 "NavigationFinderActivity",
