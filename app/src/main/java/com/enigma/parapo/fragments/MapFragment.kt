@@ -264,7 +264,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 initNavigationPolylineLineLayer()
 
                 // Logs all the map layers
-                enumerateMapLayers(mapboxMap.style)
+                // enumerateMapLayers(mapboxMap.style)
 
                 // Create a list of features from the feature collection
                 val featureList: List<Feature>? = featureCollection.features()
@@ -993,6 +993,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             navigationRouteLineLayer.apply {
                 lineColor(resources.getColor(R.color.navigationRouteLine_default))
                 lineWidth(NAVIGATION_LINE_WIDTH)
+                slot("middle")
             }
 
             style.addLayerBelow(navigationRouteLineLayer, "mapbox-location-indicator-layer")
