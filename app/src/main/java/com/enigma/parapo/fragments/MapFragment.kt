@@ -109,6 +109,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     private val NAVIGATION_LINE_WIDTH = 9.0
 
     private lateinit var locationProvider: LocationProvider
+    private var userLocation: Point? = null
 
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
@@ -170,6 +171,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
+        userLocation = it
         mapView.mapboxMap.setCamera(CameraOptions.Builder().center(it).build())
         mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
     }
@@ -869,12 +871,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude())
 
         // Initialize the directionsApiClient object for eventually drawing a navigation route on the map
-        // TODO: Replace mockLocation with getDeviceLocation
-        val mockLocation = Point.fromLngLat(120.59270718466132, 16.418361457286892)
         val routeOptions: RouteOptions =
             RouteOptions.builder().applyDefaultNavigationOptions()
                 .profile(DirectionsCriteria.PROFILE_WALKING)
-                .coordinatesList(listOf(mockLocation, destinationMarker)).build()
+                .coordinatesList(listOf(userLocation, destinationMarker)).build()
 
         val directionsApiClient: MapboxDirections =
             MapboxDirections.builder().routeOptions(routeOptions)
@@ -924,18 +924,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 Toast.makeText(activity, R.string.failure_to_retrieve, Toast.LENGTH_LONG).show()
             }
         })
-    }
-
-    // TODO: Check if null
-    private fun getDeviceLocation(): Point? {
-        var deviceLocation: Point? = null
-        locationProvider.getLastLocation { result ->
-            if (result != null) {
-                deviceLocation = Point.fromLngLat(result.longitude, result.latitude)
-            }
-        }
-
-        return deviceLocation
     }
 
     private fun repositionMapCamera(newTarget: Point) {
