@@ -632,7 +632,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             } else {
                 // Remove navigation route on the map and hide the location cards
                 // when clicking outside the markers
-                mapView.mapboxMap.style?.removeStyleSource("navigation-route-source-id")
+                mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
+                    "navigation-route-source-id",
+                    "",
+                    listOf("navigation-route-feature-id")
+                )
                 locationsRecyclerView.visibility = View.GONE
             }
         }
@@ -970,7 +974,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         LineString.fromPolyline(
                             route.geometry()!!,
                             PRECISION_6
-                        )
+                        ), null,
+                        "navigation-route-feature-id"
                     )
                 )
             )
