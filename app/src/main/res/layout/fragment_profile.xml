@@ -6,17 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
+    <ImageView
+        android:id="@+id/llPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="780dp"
+        android:src="@drawable/profile_placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/llProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/start_end_margin"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="45dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="@+id/llPlaceholder"
+        app:layout_constraintStart_toStartOf="@+id/llPlaceholder"
+        app:layout_constraintTop_toTopOf="@+id/llPlaceholder">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mainProfilePic"
