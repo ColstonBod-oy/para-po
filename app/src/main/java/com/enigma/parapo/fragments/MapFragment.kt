@@ -12,7 +12,6 @@ import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -171,7 +170,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
-        userLocation = it
         mapView.mapboxMap.setCamera(CameraOptions.Builder().center(it).build())
         mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
     }
@@ -306,10 +304,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 singleLocationLngLat
                             )
                         )
-
-                        // Call getInformationFromDirectionsApi() to eventually display the location's
-                        // distance from device location
-                        getInformationFromDirectionsApi(singleLocationPosition, false, x)
                     }
 
                     // Hide the location cards initially
@@ -323,11 +317,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         true
                     }
                 }
-            }
-
-            // Show user location if location permissions were granted
-            if (requireActivity().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                showUserLocation()
             }
         }
 
@@ -392,6 +381,13 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         val searchEngineSettings = SearchEngineSettings()
         locationProvider = searchEngineSettings.locationProvider
             ?: throw IllegalStateException("No location provider found")
+
+        // Show and update user location if location permissions were granted
+        // and location provider is initialized
+        if (requireActivity().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            showUserLocation()
+            updateUserLocation()
+        }
 
         val searchEngine = SearchEngine.createSearchEngineWithBuiltInDataProviders(
             apiType = ApiType.GEOCODING,
@@ -612,8 +608,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                     // Start call to the Mapbox Directions API
                                     getInformationFromDirectionsApi(
                                         selectedFeaturePoint,
-                                        true,
-                                        null
+                                        x
                                     )
                                 } else {
                                     Toast.makeText(
@@ -707,7 +702,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         // Check for an internet connection before making the call to Mapbox Directions API
         if (deviceHasInternetConnection()) {
             // Start call to the Mapbox Directions API
-            getInformationFromDirectionsApi(selectedLocationPoint!!, true, null)
+            getInformationFromDirectionsApi(selectedLocationPoint!!, position)
         } else {
             Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
         }
@@ -869,16 +864,15 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
     private fun getInformationFromDirectionsApi(
         destinationPoint: Point,
-        fromMarkerClick: Boolean, @Nullable listIndex: Int?
+        listIndex: Int
     ) {
-        val destinationMarker =
-            Point.fromLngLat(destinationPoint.longitude(), destinationPoint.latitude())
+        updateUserLocation()
 
         // Initialize the directionsApiClient object for eventually drawing a navigation route on the map
         val routeOptions: RouteOptions =
             RouteOptions.builder().applyDefaultNavigationOptions()
                 .profile(DirectionsCriteria.PROFILE_WALKING)
-                .coordinatesList(listOf(userLocation, destinationMarker)).build()
+                .coordinatesList(listOf(userLocation, destinationPoint)).build()
 
         val directionsApiClient: MapboxDirections =
             MapboxDirections.builder().routeOptions(routeOptions)
@@ -899,28 +893,24 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 } else if (response.body()!!.routes().size < 1) {
                     Log.e("MapFragment", "No routes found")
                 } else {
-                    if (fromMarkerClick) {
-                        // Retrieve and draw the navigation route on the map
-                        val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
-                        drawNavigationPolylineRoute(currentRoute)
-                    } else {
-                        // Use Mapbox Turf helper method to convert meters to miles and then format the mileage number
-                        val df = DecimalFormat("#.#")
-                        val finalConvertedFormattedDistance = df.format(
-                            TurfConversion.convertLength(
-                                response.body()!!.routes()[0].distance(), TurfConstants.UNIT_METERS,
-                                TurfConstants.UNIT_MILES
-                            )
-                        ).toString()
+                    // Retrieve and draw the navigation route on the map
+                    val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
+                    drawNavigationPolylineRoute(currentRoute)
 
-                        // Set the distance for each location object in the list of locations
-                        if (listIndex != null) {
-                            listOfIndividualLocations[listIndex].distance =
-                                finalConvertedFormattedDistance
-                            // Refresh the displayed recyclerview when the location's distance is set
-                            styleRvAdapter.notifyDataSetChanged()
-                        }
-                    }
+                    // Use Mapbox Turf helper method to convert meters to miles and then format the mileage number
+                    val df = DecimalFormat("#.#")
+                    val finalConvertedFormattedDistance = df.format(
+                        TurfConversion.convertLength(
+                            response.body()!!.routes()[0].distance(), TurfConstants.UNIT_METERS,
+                            TurfConstants.UNIT_MILES
+                        )
+                    ).toString()
+
+                    // Set the distance for each location object in the list of locations
+                    listOfIndividualLocations[listIndex].distance =
+                        finalConvertedFormattedDistance
+                    // Refresh the displayed recyclerview when the location's distance is set
+                    styleRvAdapter.notifyItemChanged(listIndex)
                 }
             }
 
@@ -928,6 +918,19 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 Toast.makeText(activity, R.string.failure_to_retrieve, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun updateUserLocation() {
+        locationProvider.getLastLocation { result ->
+            if (result != null) {
+                userLocation = Point.fromLngLat(result.longitude, result.latitude)
+            } else {
+                Toast.makeText(
+                    activity, "Failed to get device location provider",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun repositionMapCamera(newTarget: Point) {
