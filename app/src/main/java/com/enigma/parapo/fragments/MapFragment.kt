@@ -499,13 +499,22 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             searchPlaceView.hide()
             trackUserLocation()
 
+            // Remove navigation route
+            mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
+                "navigation-route-source-id",
+                "",
+                listOf("navigation-route-feature-id")
+            )
+
             // Show nav view
             searchPlaceListener?.showNavView()
         }
 
         searchPlaceView.addOnNavigateClickListener { searchPlace ->
             trackUserLocation()
-            startActivity(geoIntent(searchPlace.coordinate))
+            updateUserLocation()
+            navigateToSearchCoordinate(searchPlace.coordinate)
+            //startActivity(geoIntent(searchPlace.coordinate))
         }
 
         searchPlaceView.addOnShareClickListener { searchPlace ->
@@ -623,6 +632,14 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     } else {
                         setFeatureSelectState(featureList[i], false)
                     }
+                }
+
+                // Hide search place bottom sheet when the markers are clicked
+                // and show nav view
+                if (!searchPlaceView.isHidden()) {
+                    searchPlaceView.hide()
+                    mapMarkersManager.clearMarkers()
+                    searchPlaceListener?.showNavView()
                 }
             } else {
                 // Remove navigation route on the map and hide the location cards
@@ -860,6 +877,14 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
         // Hide nav view
         searchPlaceListener?.hideNavView()
+
+        // Remove navigation route and hide the location cards
+        mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
+            "navigation-route-source-id",
+            "",
+            listOf("navigation-route-feature-id")
+        )
+        locationsRecyclerView.visibility = View.GONE
     }
 
     private fun getInformationFromDirectionsApi(
@@ -931,6 +956,41 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 ).show()
             }
         }
+    }
+
+    private fun navigateToSearchCoordinate(destinationPoint: Point) {
+        val routeOptions: RouteOptions =
+            RouteOptions.builder().applyDefaultNavigationOptions()
+                .profile(DirectionsCriteria.PROFILE_DRIVING)
+                .coordinatesList(listOf(userLocation, destinationPoint)).build()
+
+        val directionsApiClient: MapboxDirections =
+            MapboxDirections.builder().routeOptions(routeOptions)
+                .accessToken(getString(R.string.mapbox_access_token))
+                .build()
+
+        directionsApiClient.enqueueCall(object : Callback<DirectionsResponse?> {
+            override fun onResponse(
+                call: Call<DirectionsResponse?>,
+                response: Response<DirectionsResponse?>
+            ) {
+                if (response.body() == null) {
+                    Log.e(
+                        "MapFragment",
+                        "No routes found, make sure you set the right user and access token."
+                    )
+                } else if (response.body()!!.routes().size < 1) {
+                    Log.e("MapFragment", "No routes found")
+                } else {
+                    val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
+                    drawNavigationPolylineRoute(currentRoute)
+                }
+            }
+
+            override fun onFailure(call: Call<DirectionsResponse?>, throwable: Throwable) {
+                Toast.makeText(activity, R.string.failure_to_retrieve, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun repositionMapCamera(newTarget: Point) {
