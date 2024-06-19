@@ -68,9 +68,6 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
-import com.mapbox.navigation.base.options.NavigationOptions
-import com.mapbox.navigation.core.MapboxNavigation
-import com.mapbox.navigation.core.lifecycle.MapboxNavigationApp
 import com.mapbox.search.ApiType
 import com.mapbox.search.ResponseInfo
 import com.mapbox.search.SearchEngine
@@ -120,7 +117,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     private lateinit var focusLocationView: FloatingActionButton
 
     private lateinit var mapView: MapView
-    private var mapboxNavigation: MapboxNavigation? = null
     private lateinit var mapMarkersManager: MapMarkersManager
 
     private lateinit var featureCollection: FeatureCollection
@@ -319,17 +315,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 }
             }
         }
-
-        // Initialize Mapbox navigation
-        if (!MapboxNavigationApp.isSetup()) {
-            MapboxNavigationApp.setup {
-                NavigationOptions.Builder(requireContext()).build()
-            }
-        }
-        MapboxNavigationApp.attach(this)
-
-        // when lifecycle state of any attached components is at least CREATED `current()` will return non-null instance.
-        mapboxNavigation = MapboxNavigationApp.current()
 
         // Set up a location request
         val locationRequest =
@@ -735,7 +720,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     override fun onStop() {
-        super.onStop()
         mapView.location
             .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
         mapView.location
@@ -743,6 +727,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         hasOnIndicatorPositionChangedListener = false
         mapView.gestures.removeOnMoveListener(moveListener)
         focusLocationView.setOnClickListener(null)
+        super.onStop()
     }
 
     // Override onAttach to make sure the hosting activity implements the listener interface
@@ -757,9 +742,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
     // Override onDetach to release the listener when the fragment is detached
     override fun onDetach() {
-        super.onDetach()
         searchPlaceListener = null
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        super.onDetach()
     }
 
     private fun updateOnBackPressedCallbackEnabled() {
