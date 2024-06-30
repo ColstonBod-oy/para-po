@@ -581,10 +581,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                             if (listOfIndividualLocations[x].location
                                     .latitude() == selectedFeaturePoint!!.latitude()
                             ) {
-                                // TODO: Update comment
                                 // Show the location cards and scroll the recyclerview to the selected marker's card.
-                                // It's "x-1" below because the mock device location marker is part of the marker list
-                                // but doesn't have its own card in the actual recyclerview.
                                 Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
                                     .show()
                                 locationsRecyclerView.visibility = View.VISIBLE
@@ -660,16 +657,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             targetState = mapView.viewport.makeFollowPuckViewportState(),
             transition = mapView.viewport.makeImmediateViewportTransition()
         )
-    }
-
-    //TODO: Use this!
-    private fun removeTerminalLocationLayer() {
-        // TODO: add comment
-        val terminalLocationLayer: Layer? =
-            mapView.mapboxMap.style?.getLayerAs("terminal-location-layer-id")
-        if (terminalLocationLayer != null) {
-            mapView.mapboxMap.style?.removeStyleLayer("terminal-location-layer-id")
-        }
     }
 
     /**
@@ -1101,7 +1088,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         })
     }
 
-    // TODO: Set theme dynamically
+    // TODO: Set the theme dynamically according to the time of the day
     /* private fun getMapStyleUri(): String {
         return when (val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> Style.STANDARD
