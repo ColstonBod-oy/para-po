@@ -49,6 +49,7 @@ class SignInActivity : AuthBaseActivity() {
         }
 
         binding?.btnSignInWithGoogle?.setOnClickListener {
+            googleSignInClient.signOut()
             sinInWithGoogle()
         }
     }
