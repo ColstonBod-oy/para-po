@@ -132,18 +132,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvOr">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="@dimen/logo_dimens_md"
                 android:layout_height="@dimen/logo_dimens_md"
                 android:layout_marginStart="@dimen/margin_horizontal_xs"
                 android:layout_marginVertical="@dimen/margin_vertical_xs"
-                android:layout_marginEnd="@dimen/margin_horizontal_xl"
-                android:src="@drawable/g_logo" />
+                android:src="@drawable/g_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,8 +153,12 @@
                 android:text="Login with Google"
                 android:textColor="@color/black"
                 android:textSize="@dimen/et_text_size_lg"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="et_text_size_sm">18sp</dimen>
-    <dimen name="et_text_size_md">20sp</dimen>
-    <dimen name="et_text_size_lg">22sp</dimen>
-    <dimen name="et_text_size_xl">36sp</dimen>
-    <dimen name="et_text_size_xxl">40sp</dimen>
+    <dimen name="et_text_size_sm">12sp</dimen>
+    <dimen name="et_text_size_md">14sp</dimen>
+    <dimen name="et_text_size_lg">16sp</dimen>
+    <dimen name="et_text_size_xl">30sp</dimen>
+    <dimen name="et_text_size_xxl">36sp</dimen>
 
-    <dimen name="margin_vertical_xs">5dp</dimen>
-    <dimen name="margin_vertical_sm">10dp</dimen>
-    <dimen name="margin_vertical_md">15dp</dimen>
-    <dimen name="margin_vertical_lg">20dp</dimen>
-    <dimen name="margin_vertical_xl">30dp</dimen>
-    <dimen name="margin_horizontal_xs">5dp</dimen>
-    <dimen name="margin_horizontal_sm">10dp</dimen>
-    <dimen name="margin_horizontal_md">20dp</dimen>
-    <dimen name="margin_horizontal_xl">50dp</dimen>
+    <dimen name="margin_vertical_xs">3dp</dimen>
+    <dimen name="margin_vertical_sm">8dp</dimen>
+    <dimen name="margin_vertical_md">13dp</dimen>
+    <dimen name="margin_vertical_lg">18dp</dimen>
+    <dimen name="margin_vertical_xl">28dp</dimen>
+    <dimen name="margin_horizontal_xs">3dp</dimen>
+    <dimen name="margin_horizontal_sm">8dp</dimen>
+    <dimen name="margin_horizontal_md">18dp</dimen>
+    <dimen name="margin_horizontal_xl">48dp</dimen>
 
-    <dimen name="logo_dimens_percent_lg">0.35</dimen>
+    <dimen name="logo_dimens_percent_lg">0.25</dimen>
     <dimen name="logo_dimens_md">35dp</dimen>
-    <dimen name="logo_dimens_lg">60dp</dimen>
-    <dimen name="logo_text_size_lg">26sp</dimen>
+    <dimen name="logo_dimens_lg">50dp</dimen>
+    <dimen name="logo_text_size_lg">20sp</dimen>
 
     <dimen name="til_radius">10dp</dimen>
     <dimen name="navigation_bar_icon_size">40dp</dimen>
