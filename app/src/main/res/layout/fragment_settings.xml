@@ -7,27 +7,27 @@
     tools:context=".fragments.SettingsFragment">
 
     <ImageView
-        android:id="@+id/ivSinInLogo"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:id="@+id/ivSettingsLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:contentDescription="image"
         android:src="@drawable/main_banner"
+        app:layout_constraintHeight_percent="@dimen/logo_dimens_percent_lg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvManageProfile"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginStart="@dimen/start_end_margin"
-        android:layout_marginEnd="@dimen/start_end_margin"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_md"
         app:cardCornerRadius="30dp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSinInLogo">
+        app:layout_constraintTop_toBottomOf="@+id/ivSettingsLogo">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,12 +38,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/margin_horizontal_md"
+                android:layout_marginVertical="@dimen/margin_vertical_sm"
                 android:text="Manage Profile"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="@dimen/et_text_size_lg"
                 android:textStyle="bold" />
 
             <ImageView
@@ -56,11 +55,10 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvChangePassword"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:layout_marginStart="@dimen/start_end_margin"
-        android:layout_marginEnd="@dimen/start_end_margin"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_md"
         app:cardCornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,12 +73,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/margin_horizontal_md"
+                android:layout_marginVertical="@dimen/margin_vertical_sm"
                 android:text="Change Password"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="@dimen/et_text_size_lg"
                 android:textStyle="bold" />
 
             <ImageView
@@ -93,10 +90,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvSignOut"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/start_end_margin"
-        android:layout_marginEnd="@dimen/start_end_margin"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_md"
         android:layout_marginBottom="100dp"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -112,13 +108,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="@dimen/margin_horizontal_sm"
+                android:layout_marginVertical="@dimen/margin_vertical_sm"
+                android:layout_marginEnd="@dimen/margin_horizontal_md"
                 android:text="Sign Out"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="@dimen/et_text_size_lg"
                 android:textStyle="bold" />
 
             <ImageView
