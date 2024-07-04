@@ -17,7 +17,7 @@ class ManageProfileActivity : AppCompatActivity() {
         binding = ActivityManageProfileBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        binding?.ivBackBtnManageProfile?.setOnClickListener {
+        binding?.cardView2?.setOnClickListener {
             finish()
         }
 

@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import com.enigma.parapo.R
 import com.enigma.parapo.activities.GetStartedActivity
 import com.enigma.parapo.activities.ManageProfileActivity
 import com.enigma.parapo.databinding.FragmentSettingsBinding
@@ -31,8 +29,7 @@ class SettingsFragment : Fragment() {
         val view = binding.root
 
         auth = Firebase.auth
-        val btnSignOut: CardView = view.findViewById(R.id.cvSignOut)
-        btnSignOut.setOnClickListener {
+        binding.cvSignOut.setOnClickListener {
             auth.signOut()
             startActivity(Intent(requireContext(), GetStartedActivity::class.java))
             requireActivity().finish()
