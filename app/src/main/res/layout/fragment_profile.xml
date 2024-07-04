@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
-    <ImageView
+    <TextView
         android:id="@+id/llPlaceholder"
-        android:layout_width="0dp"
-        android:layout_height="780dp"
-        android:src="@drawable/profile_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#f44e34"
+        android:textSize="@dimen/et_text_size_md"
+        android:textStyle="bold"
+        android:shadowColor="#000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="1"
+        android:text="Work in progress\n👀🛠"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,9 +32,9 @@
         android:layout_marginTop="45dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/llPlaceholder"
-        app:layout_constraintStart_toStartOf="@+id/llPlaceholder"
-        app:layout_constraintTop_toTopOf="@+id/llPlaceholder">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mainProfilePic"
@@ -46,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Name"
-                android:textColor="@color/black"
+                android:textColor="@color/gray"
                 android:textSize="@dimen/et_text_size_lg"
                 android:textStyle="bold" />
         </LinearLayout>
