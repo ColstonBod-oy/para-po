@@ -1,7 +1,7 @@
 # para-po
 ## Licenses
 
-This project is licensed under [GPL-3.0](LICENSE.txt).
+This project is licensed under [GPL-3.0](LICENSE).
 
 ### Third-Party Licenses
 
