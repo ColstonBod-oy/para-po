@@ -14,4 +14,4 @@ This project uses the following third-party libraries:
 - [mapbox-search-android](https://github.com/mapbox/mapbox-search-android) by Mapbox, licensed under the [Mapbox TOS](https://www.mapbox.com/legal/tos/).
 - [mapbox-navigation-android](https://github.com/mapbox/mapbox-navigation-android) by Mapbox, licensed under the [Mapbox TOS](https://www.mapbox.com/legal/tos/).
 
-See the `NOTICE` file for information about authorship and attribution requirements related to this project.
+See the `[NOTICE](NOTICE)` file for information about authorship and attribution requirements related to this project.
