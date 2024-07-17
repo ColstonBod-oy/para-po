@@ -88,4 +88,7 @@ dependencies {
     implementation("com.mapbox.search:mapbox-search-android-ui:2.0.0-beta.2")
     implementation("com.mapbox.maps:android:11.0.0")
     implementation("com.mapbox.navigationcore:android:3.0.0-rc.5")
+
+    // Sticker view
+    implementation("com.github.LightSun:Android-StickerView:1.0.4")
 }
