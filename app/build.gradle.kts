@@ -89,6 +89,6 @@ dependencies {
     implementation("com.mapbox.maps:android:11.0.0")
     implementation("com.mapbox.navigationcore:android:3.0.0-rc.5")
 
-    // Sticker view
-    implementation("com.github.LightSun:Android-StickerView:1.0.4")
+    // StickerView
+    implementation(project(":stickerview"))
 }

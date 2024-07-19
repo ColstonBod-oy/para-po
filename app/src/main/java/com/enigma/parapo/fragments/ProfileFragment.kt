@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.enigma.parapo.R
 import com.enigma.parapo.contants.Constants
 import com.enigma.parapo.databinding.FragmentProfileBinding
 import com.enigma.parapo.firebase.FireStoreClass
 import com.enigma.parapo.models.User
+import com.enigma.parapo.stickerview.DrawableSticker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -31,6 +34,11 @@ class ProfileFragment : Fragment() {
         setName()
         setProfilePic()
         mFireStore = FirebaseFirestore.getInstance()
+
+        val stickerView = binding.stickerView
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.sticker1)
+        stickerView.addSticker(DrawableSticker(drawable))
+
         return view
     }
 
