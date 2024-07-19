@@ -1,5 +1,6 @@
 package com.enigma.parapo.models;
 
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
 /**
@@ -12,13 +13,15 @@ public class IndividualLocation {
     private String dropOff;
     private String fare;
     private String distance;
+    private LineString route;
     private Point location;
 
-    public IndividualLocation(String name, String address, String dropOff, String fare, Point location) {
+    public IndividualLocation(String name, String address, String dropOff, String fare, LineString route, Point location) {
         this.name = name;
         this.address = address;
         this.dropOff = dropOff;
         this.fare = fare;
+        this.route = route;
         this.location = location;
     }
 
@@ -40,6 +43,10 @@ public class IndividualLocation {
 
     public String getFare() {
         return fare;
+    }
+
+    public LineString getRoute() {
+        return route;
     }
 
     public String getDistance() {

@@ -35,6 +35,8 @@ import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.directions.v5.models.RouteOptions
+import com.mapbox.api.matching.v5.MapboxMapMatching
+import com.mapbox.api.matching.v5.models.MapMatchingResponse
 import com.mapbox.common.location.LocationProvider
 import com.mapbox.core.constants.Constants.PRECISION_6
 import com.mapbox.geojson.Feature
@@ -257,7 +259,18 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 initTerminalLocationIconSymbolLayer()
 
                 // Set up the LineLayer which will show the navigation route line to a particular terminal location
-                initNavigationPolylineLineLayer()
+                initRoutePolylineLineLayer(
+                    "navigation-route-source-id",
+                    "navigation-route-layer-id",
+                    R.color.navigationRouteLine_default
+                )
+
+                // Set up the LineLayer which will show the jeepney route line from a particular terminal location
+                initRoutePolylineLineLayer(
+                    "jeepney-route-source-id",
+                    "jeepney-route-layer-id",
+                    R.color.jeepneyRouteLine_default
+                )
 
                 // Logs all the map layers
                 // enumerateMapLayers(mapboxMap.style)
@@ -278,10 +291,19 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         val singleLocationDropOff = singleLocation.getStringProperty("destinations")
                         val singleLocationDescription = singleLocation.getStringProperty("drop-off")
                         val singleLocationFare = singleLocation.getStringProperty("fare")
+                        val singleLocationRoute = singleLocation.getStringProperty("route")
 
 
                         // Add a boolean property to use for adjusting the icon of the selected terminal location
                         singleLocation.addBooleanProperty(PROPERTY_SELECTED, false)
+
+                        // Create a new LineString object
+                        var singleLocationRouteLine: LineString? = null
+
+                        // Generate a LineString from the single location's route coordinates
+                        if (singleLocationRoute.isNotEmpty()) {
+                            singleLocationRouteLine = LineString.fromJson(singleLocationRoute)
+                        }
 
                         // Get the single location's LngLat coordinates
                         val singleLocationPosition = singleLocation.geometry() as Point?
@@ -299,6 +321,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 singleLocationDescription,
                                 singleLocationDropOff,
                                 singleLocationFare,
+                                singleLocationRouteLine,
                                 singleLocationLngLat
                             )
                         )
@@ -487,11 +510,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             trackUserLocation()
 
             // Remove navigation route
-            mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
-                "navigation-route-source-id",
-                "",
-                listOf("navigation-route-feature-id")
-            )
+            removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
+
+            // Remove jeepney route
+            removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
 
             // Show nav view
             searchPlaceListener?.showNavView()
@@ -560,6 +582,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     private fun handleClickIcon(screenPoint: RenderedQueryGeometry) {
+        // Remove existing jeepney route line on the map
+        removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
+
         mapView.mapboxMap.queryRenderedFeatures(
             screenPoint,
             RenderedQueryOptions(listOf("terminal-location-layer-id"), null)
@@ -603,6 +628,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                         selectedFeaturePoint,
                                         x
                                     )
+
+                                    // Start call to the Mapbox Map Matching API if a route exists
+                                    if (listOfIndividualLocations[x].route != null) {
+                                        getInformationFromMapMatchingApi(listOfIndividualLocations[x].route)
+                                    }
                                 } else {
                                     Toast.makeText(
                                         activity,
@@ -626,13 +656,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     searchPlaceListener?.showNavView()
                 }
             } else {
-                // Remove navigation route on the map and hide the location cards
+                // Remove route lines on the map and hide the location cards
                 // when clicking outside the markers
-                mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
-                    "navigation-route-source-id",
-                    "",
-                    listOf("navigation-route-feature-id")
-                )
+                removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
+                removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
                 locationsRecyclerView.visibility = View.GONE
             }
         }
@@ -667,6 +694,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
      * @param position the clicked card's position/index in the overall list of cards
      */
     override fun onItemClick(position: Int) {
+        // Remove existing jeepney route line on the map
+        removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
+
         // Get the selected individual location via its card's position in the recyclerview of cards
         val selectedLocation = listOfIndividualLocations[position]
 
@@ -694,6 +724,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         if (deviceHasInternetConnection()) {
             // Start call to the Mapbox Directions API
             getInformationFromDirectionsApi(selectedLocationPoint!!, position)
+
+            // Start call to the Mapbox Map Matching API if a route exists
+            if (selectedLocation.route != null) {
+                getInformationFromMapMatchingApi(selectedLocation.route)
+            }
         } else {
             Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
         }
@@ -852,12 +887,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         // Hide nav view
         searchPlaceListener?.hideNavView()
 
-        // Remove navigation route and hide the location cards
-        mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
-            "navigation-route-source-id",
-            "",
-            listOf("navigation-route-feature-id")
-        )
+        // Remove route lines and hide the location cards
+        removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
+        removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
         locationsRecyclerView.visibility = View.GONE
     }
 
@@ -894,7 +926,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 } else {
                     // Retrieve and draw the navigation route on the map
                     val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
-                    drawNavigationPolylineRoute(currentRoute)
+                    drawPolylineRoute(currentRoute, "navigation-route-source-id", "navigation-route-feature-id")
 
                     // Use Mapbox Turf helper method to convert meters to miles and then format the mileage number
                     val df = DecimalFormat("#.#")
@@ -914,7 +946,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
 
             override fun onFailure(call: Call<DirectionsResponse?>, throwable: Throwable) {
-                Toast.makeText(activity, R.string.failure_to_retrieve, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -930,6 +962,41 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 ).show()
             }
         }
+    }
+
+    private fun getInformationFromMapMatchingApi(
+        routeLine: LineString,
+    ) {
+        // Initialize the mapMatchingApiClient object for eventually drawing a jeepney route on the map
+        val mapMatchingApiClient: MapboxMapMatching =
+            MapboxMapMatching.builder().coordinates(routeLine.coordinates()).profile(DirectionsCriteria.PROFILE_DRIVING)
+                .accessToken(getString(R.string.mapbox_access_token))
+                .build()
+
+        mapMatchingApiClient.enqueueCall(object : Callback<MapMatchingResponse?> {
+            override fun onResponse(
+                call: Call<MapMatchingResponse?>,
+                response: Response<MapMatchingResponse?>
+            ) {
+                // Check that the response isn't null and that the response has a route
+                if (response.body() == null) {
+                    Log.e(
+                        "MapFragment",
+                        "No routes found, make sure you set the right user and access token."
+                    )
+                } else if ((response.body()!!.matchings()?.size ?: 0) < 1) {
+                    Log.e("MapFragment", "No routes found")
+                } else {
+                    // Retrieve and draw the jeepney route on the map
+                    val currentRoute: DirectionsRoute = response.body()!!.matchings()!![0].toDirectionRoute()
+                    drawPolylineRoute(currentRoute, "jeepney-route-source-id", "jeepney-route-feature-id")
+                }
+            }
+
+            override fun onFailure(call: Call<MapMatchingResponse?>, throwable: Throwable) {
+                Toast.makeText(activity, R.string.jeepney_route_failure, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun navigateToSearchCoordinate(destinationPoint: Point) {
@@ -957,12 +1024,12 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     Log.e("MapFragment", "No routes found")
                 } else {
                     val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
-                    drawNavigationPolylineRoute(currentRoute)
+                    drawPolylineRoute(currentRoute, "navigation-route-source-id", "navigation-route-feature-id")
                 }
             }
 
             override fun onFailure(call: Call<DirectionsResponse?>, throwable: Throwable) {
-                Toast.makeText(activity, R.string.failure_to_retrieve, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -1002,9 +1069,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         snapHelper.attachToRecyclerView(locationsRecyclerView)
     }
 
-    private fun drawNavigationPolylineRoute(route: DirectionsRoute) {
-        // Retrieve and update the source designated for showing the navigation polyline route
-        mapView.mapboxMap.style?.getSourceAs<GeoJsonSource>("navigation-route-source-id")
+    private fun drawPolylineRoute(route: DirectionsRoute, sourceId: String, featureId: String) {
+        // Retrieve and update the source designated for showing the polyline route
+        mapView.mapboxMap.style?.getSourceAs<GeoJsonSource>(sourceId)
             ?.featureCollection(
                 FeatureCollection.fromFeature(
                     Feature.fromGeometry(
@@ -1012,28 +1079,28 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                             route.geometry()!!,
                             PRECISION_6
                         ), null,
-                        "navigation-route-feature-id"
+                        featureId
                     )
                 )
             )
     }
 
-    private fun initNavigationPolylineLineLayer() {
+    private fun initRoutePolylineLineLayer(sourceId: String, layerId: String, color: Int) {
         val style: Style? = mapView.mapboxMap.style
         if (style != null) {
             // Create and add the GeoJsonSource to the map
             val navigationLineLayerGeoJsonSource =
-                GeoJsonSource.Builder("navigation-route-source-id").build()
+                GeoJsonSource.Builder(sourceId).build()
             style.addSource(navigationLineLayerGeoJsonSource)
 
-            // Create and add the LineLayer to the map to show the navigation route line
+            // Create and add the LineLayer to the map to show the route line
             val navigationRouteLineLayer = LineLayer(
-                "navigation-route-layer-id",
-                "navigation-route-source-id"
+                layerId,
+                sourceId
             )
 
             navigationRouteLineLayer.apply {
-                lineColor(resources.getColor(R.color.navigationRouteLine_default))
+                lineColor(resources.getColor(color))
                 lineWidth(NAVIGATION_LINE_WIDTH)
                 slot("middle")
             }
@@ -1041,12 +1108,20 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             style.addLayerBelow(navigationRouteLineLayer, "mapbox-location-indicator-layer")
         } else {
             Log.d(
-                "NavigationFinderActivity",
-                "initNavigationPolylineLineLayer: Style isn't ready yet."
+                "RouteFinderActivity",
+                "initRoutePolylineLineLayer: Style isn't ready yet."
             )
 
             throw java.lang.IllegalStateException("Style isn't ready yet.")
         }
+    }
+
+    private fun removeSourceFeatures(sourceId: String, featureIds: List<String>) {
+        mapView.mapboxMap.style?.removeGeoJSONSourceFeatures(
+            sourceId,
+            "",
+            featureIds
+        )
     }
 
     private fun deviceHasInternetConnection(): Boolean {
