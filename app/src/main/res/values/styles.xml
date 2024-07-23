@@ -4,22 +4,16 @@
         <item name="colorPrimary">@color/blue_5</item>
     </style>
 
-    <style name="CustomTheme" parent="Theme.ParaPo">
+    <style name="CustomSearchResultsViewTheme" parent="Theme.ParaPo">
+        <item name="mapboxSearchSdkTheme">@style/MapboxSearchSdk.Theme.Light</item>
+    </style>
+
+    <style name="CustomSearchPlaceBottomSheetViewTheme" parent="Theme.ParaPo">
         <item name="mapboxSearchSdkTheme">@style/CustomSearchSdkTheme</item>
     </style>
 
-    <style name="CustomSearchSdkTheme" parent="">
-        <item name="mapboxSearchSdkPrimaryTextColor">#353435</item>
-        <item name="mapboxSearchSdkPrimaryTextInactiveColor">#BFBDBF</item>
-        <item name="mapboxSearchSdkPrimaryAccentColor">#0075FF</item>
-        <item name="mapboxSearchSdkOnPrimaryAccentColor">#F3FEFF</item>
-        <item name="mapboxSearchSdkDistanceColor">#A3B3C5</item>
-        <item name="mapboxSearchSdkIconTintColor">#353435</item>
-        <item name="mapboxSearchSdkBackgroundColor">#FFFFFF</item>
+    <style name="CustomSearchSdkTheme" parent="MapboxSearchSdk.Theme.Light">
         <item name="mapboxSearchSdkBackgroundSecondaryColor">#0075FF</item>
-        <item name="mapboxSearchSdkPopulateArrowColor">#F3FEFF</item>
-        <item name="mapboxSearchSdkProgressColor">#353435</item>
-        <item name="mapboxSearchSdkErrorIconColor">#353435</item>
     </style>
 
     <!-- Default theme -->
