@@ -46,8 +46,6 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         stickerView.setLocked(true)
         loadStickers()
         initViews()
-        //val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.sticker1)
-        //stickerView.addSticker(DrawableSticker(drawable))
 
         return view
     }
