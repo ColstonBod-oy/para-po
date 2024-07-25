@@ -23,4 +23,6 @@
     <string name="drop_off">Drop off points</string>
     <string name="fare">Fare</string>
     <string name="distance">mi</string>
+
+    <string name="sticker">Sticker</string>
 </resources>

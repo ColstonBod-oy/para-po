@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="stickers">
+        <item>@drawable/skin1</item>
+        <item>@drawable/skin2</item>
+        <item>@drawable/skin3</item>
+        <item>@drawable/skin4</item>
+        <item>@drawable/skin5</item>
+        <item>@drawable/skin6</item>
+        <item>@drawable/skin7</item>
+        <item>@drawable/skin8</item>
+        <item>@drawable/sticker1</item>
+        <item>@drawable/sticker2</item>
+        <item>@drawable/sticker3</item>
+        <item>@drawable/sticker4</item>
+        <item>@drawable/sticker5</item>
+    </array>
+</resources>
