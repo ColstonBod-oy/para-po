@@ -3,5 +3,9 @@ A startup navigation app utilizing Mapbox APIs and SDKs, designed to make public
 
 DEMO:
 
-<video src="https://github.com/user-attachments/assets/3d62c1e4-143c-422b-bc7c-2b17c00d5bac"></video>
+<video src="https://github.com/user-attachments/assets/e81d0e24-91ad-467d-a483-9bd763cb93f9"></video>
+
+
+
+
 
