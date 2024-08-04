@@ -8,7 +8,13 @@ import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -24,9 +30,17 @@ import com.enigma.parapo.R
 import com.enigma.parapo.adapters.LocationRecyclerViewAdapter
 import com.enigma.parapo.databinding.FragmentMapBinding
 import com.enigma.parapo.models.IndividualLocation
-import com.enigma.parapo.utils.*
+import com.enigma.parapo.utils.LinearLayoutManagerWithSmoothScroller
+import com.enigma.parapo.utils.dpToPx
+import com.enigma.parapo.utils.isPermissionGranted
+import com.enigma.parapo.utils.shareIntent
+import com.enigma.parapo.utils.userDistanceTo
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.android.gestures.MoveGestureDetector
@@ -43,7 +57,16 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
+import com.mapbox.maps.BuildConfig
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapView
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.RenderedQueryOptions
+import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.eq
+import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.get
+import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.literal
 import com.mapbox.maps.extension.style.layers.addLayer
 import com.mapbox.maps.extension.style.layers.addLayerBelow
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
@@ -84,6 +107,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.mapbox.search.ui.adapter.engines.SearchEngineUiAdapter
 import com.mapbox.search.ui.view.CommonSearchViewConfiguration
 import com.mapbox.search.ui.view.DistanceUnitType
+import com.mapbox.search.ui.view.SearchResultAdapterItem
 import com.mapbox.search.ui.view.SearchResultsView
 import com.mapbox.search.ui.view.place.SearchPlace
 import com.mapbox.search.ui.view.place.SearchPlaceBottomSheetView
@@ -103,6 +127,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
     // Marker is selected
     private val PROPERTY_SELECTED = "selected"
+
+    // Keeps track of the previously selected terminal index
+    private var prevSelectedIndex = 0
 
     private val NAVIGATION_LINE_WIDTH = 9.0
 
@@ -257,6 +284,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             mapboxMap.subscribeStyleLoaded {
                 // Set up the SymbolLayer which will show the icons for each terminal location
                 initTerminalLocationIconSymbolLayer()
+
+                // Set up the SymbolLayer which will show the selected terminal icon
+                initSelectedStoreSymbolLayer()
 
                 // Set up the LineLayer which will show the navigation route line to a particular terminal location
                 initRoutePolylineLineLayer(
@@ -501,6 +531,57 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
         })
 
+        searchResultsView.addActionListener(object : SearchResultsView.ActionListener {
+            override fun onErrorItemClick(item: SearchResultAdapterItem.Error) {
+                // Handle error item click
+            }
+
+            override fun onHistoryItemClick(item: SearchResultAdapterItem.History) {
+                // Handle history item click
+            }
+
+            override fun onMissingResultFeedbackClick(item: SearchResultAdapterItem.MissingResultFeedback) {
+                // Handle missing result feedback click
+            }
+
+            override fun onPopulateQueryClick(item: SearchResultAdapterItem.Result) {
+                // Handle populate query click
+            }
+
+            override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
+                val payload = item.payload as List<*>
+                val payloadIndex = payload[0] as Int
+                val payloadGeometry = payload[1] as Point
+
+                // Set selected terminal
+                setFeatureSelectState(featureCollection.features()!![prevSelectedIndex], false)
+                setSelected(payloadIndex)
+                repositionMapCamera(payloadGeometry)
+
+                // Show the location card
+                Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
+                    .show()
+                locationsRecyclerView.visibility = View.VISIBLE
+                locationsRecyclerView.scrollToPosition(payloadIndex)
+
+                if (deviceHasInternetConnection()) {
+                    // Start call to the Mapbox Directions API
+                    getInformationFromDirectionsApi(payloadGeometry, payloadIndex)
+
+                    // Start call to the Mapbox Map Matching API if a route exists
+                    val selectedLocation = listOfIndividualLocations[payloadIndex]
+                    if (selectedLocation.route != null) {
+                        getInformationFromMapMatchingApi(selectedLocation.route)
+                    }
+                } else {
+                    Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
+                }
+
+                // Close the search view
+                toolbar.collapseActionView()
+            }
+        })
+
         searchPlaceView = binding.searchPlaceView
         searchPlaceView.initialize(CommonSearchViewConfiguration(DistanceUnitType.IMPERIAL))
 
@@ -510,7 +591,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             trackUserLocation()
 
             // Remove navigation route
-            removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
+            removeSourceFeatures(
+                "navigation-route-source-id",
+                listOf("navigation-route-feature-id")
+            )
 
             // Remove jeepney route
             removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
@@ -598,9 +682,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     if (featureList[i].getStringProperty("name").equals(name)) {
                         val selectedFeaturePoint = featureList[i].geometry() as Point?
 
-                        if (featureSelectStatus(i)) {
-                            setFeatureSelectState(featureList[i], false)
-                        } else {
+                        if (!featureSelectStatus(i)) {
                             setSelected(i)
                         }
 
@@ -658,7 +740,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             } else {
                 // Remove route lines on the map and hide the location cards
                 // when clicking outside the markers
-                removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
+                setFeatureSelectState(featureCollection.features()!![prevSelectedIndex], false)
+                removeSourceFeatures(
+                    "navigation-route-source-id",
+                    listOf("navigation-route-feature-id")
+                )
                 removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
                 locationsRecyclerView.visibility = View.GONE
             }
@@ -704,10 +790,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         val featureList = featureCollection.features()
         val selectedLocationPoint = featureCollection.features()!![position].geometry() as Point?
         for (i in featureList!!.indices) {
-            if (featureList[i].getStringProperty("name") == selectedLocation.name) {
-                if (featureSelectStatus(i)) {
-                    setFeatureSelectState(featureList[i], false)
-                } else {
+            if (featureList[i].getStringProperty("name") == selectedLocation.name
+            ) {
+                if (!featureSelectStatus(i)) {
                     setSelected(i)
                 }
             } else {
@@ -843,6 +928,43 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     /**
+     * Adds a SymbolLayer which will show the selected location's icon
+     */
+    private fun initSelectedStoreSymbolLayer() {
+        val style: Style? = mapView.mapboxMap.style
+        if (style != null) {
+            // Add the icon image to the map
+            style.addImage(
+                "selected-terminal-location-icon-id",
+                BitmapFactory.decodeResource(
+                    requireContext().resources,
+                    R.drawable.default_theme_icon_selected
+                )
+            )
+
+            // Create and add the selected terminal location icon SymbolLayer to the map
+            val selectedTerminalLocationSymbolLayer = SymbolLayer(
+                "selected-terminal-location-layer-id",
+                "terminal-location-source-id"
+            )
+            selectedTerminalLocationSymbolLayer.apply {
+                iconImage("selected-terminal-location-icon-id")
+                iconAllowOverlap(true)
+                iconIgnorePlacement(true)
+                filter(eq(get(PROPERTY_SELECTED), literal(true)))
+            }
+            style.addLayer(selectedTerminalLocationSymbolLayer)
+        } else {
+            Log.d(
+                "TerminalFinderActivity",
+                "initSelectedStoreSymbolLayer: Style isn't ready yet."
+            )
+
+            throw java.lang.IllegalStateException("Style isn't ready yet.")
+        }
+    }
+
+    /**
      * Checks whether a Feature's boolean "selected" property is true or false
      *
      * @param index the specific Feature's index position in the FeatureCollection's list of Features.
@@ -860,6 +982,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     private fun setSelected(index: Int) {
         val feature = featureCollection.features()!![index]
         setFeatureSelectState(feature, true)
+        prevSelectedIndex = index
         refreshTerminalSource()
     }
 
@@ -877,7 +1000,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
      * Updates the display of data on the map after the FeatureCollection has been modified
      */
     private fun refreshTerminalSource() {
-        mapView.mapboxMap.style?.removeStyleSource("terminal-location-source-id")
+        mapView.mapboxMap.style?.getSourceAs<GeoJsonSource>("terminal-location-source-id")
+            ?.featureCollection(featureCollection)
     }
 
     private fun closeSearchView() {
@@ -926,7 +1050,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 } else {
                     // Retrieve and draw the navigation route on the map
                     val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
-                    drawPolylineRoute(currentRoute, "navigation-route-source-id", "navigation-route-feature-id")
+                    drawPolylineRoute(
+                        currentRoute,
+                        "navigation-route-source-id",
+                        "navigation-route-feature-id"
+                    )
 
                     // Use Mapbox Turf helper method to convert meters to miles and then format the mileage number
                     val df = DecimalFormat("#.#")
@@ -946,7 +1074,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
 
             override fun onFailure(call: Call<DirectionsResponse?>, throwable: Throwable) {
-                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG)
+                    .show()
             }
         })
     }
@@ -969,7 +1098,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     ) {
         // Initialize the mapMatchingApiClient object for eventually drawing a jeepney route on the map
         val mapMatchingApiClient: MapboxMapMatching =
-            MapboxMapMatching.builder().coordinates(routeLine.coordinates()).profile(DirectionsCriteria.PROFILE_DRIVING)
+            MapboxMapMatching.builder().coordinates(routeLine.coordinates())
+                .profile(DirectionsCriteria.PROFILE_DRIVING)
                 .accessToken(getString(R.string.mapbox_access_token))
                 .build()
 
@@ -988,8 +1118,13 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     Log.e("MapFragment", "No routes found")
                 } else {
                     // Retrieve and draw the jeepney route on the map
-                    val currentRoute: DirectionsRoute = response.body()!!.matchings()!![0].toDirectionRoute()
-                    drawPolylineRoute(currentRoute, "jeepney-route-source-id", "jeepney-route-feature-id")
+                    val currentRoute: DirectionsRoute =
+                        response.body()!!.matchings()!![0].toDirectionRoute()
+                    drawPolylineRoute(
+                        currentRoute,
+                        "jeepney-route-source-id",
+                        "jeepney-route-feature-id"
+                    )
                 }
             }
 
@@ -1024,12 +1159,17 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     Log.e("MapFragment", "No routes found")
                 } else {
                     val currentRoute: DirectionsRoute = response.body()!!.routes()[0]
-                    drawPolylineRoute(currentRoute, "navigation-route-source-id", "navigation-route-feature-id")
+                    drawPolylineRoute(
+                        currentRoute,
+                        "navigation-route-source-id",
+                        "navigation-route-feature-id"
+                    )
                 }
             }
 
             override fun onFailure(call: Call<DirectionsResponse?>, throwable: Throwable) {
-                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, R.string.navigation_route_failure, Toast.LENGTH_LONG)
+                    .show()
             }
         })
     }
@@ -1159,10 +1299,31 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                searchEngineUiAdapter.search(newText)
+                //searchEngineUiAdapter.search(newText)
+                featureCollectionSearch(newText)
                 return false
             }
         })
+    }
+
+    private fun featureCollectionSearch(query: String) {
+        val viewItems = mutableListOf<SearchResultAdapterItem>()
+
+        featureCollection.features()?.forEachIndexed { index, feature ->
+            if (feature.getStringProperty("name").toLowerCase().contains(query.toLowerCase())) {
+                viewItems.add(
+                    SearchResultAdapterItem.Result(
+                        feature.getStringProperty("name"),
+                        null,
+                        null,
+                        R.drawable.default_theme_icon,
+                        payload = listOf(index, feature.geometry())
+                    )
+                )
+            }
+        }
+
+        searchResultsView.setAdapterItems(viewItems)
     }
 
     // TODO: Set the theme dynamically according to the time of the day
