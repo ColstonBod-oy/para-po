@@ -6,87 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SettingsFragment">
 
-    <ImageView
-        android:id="@+id/ivSettingsLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:contentDescription="image"
-        android:src="@drawable/main_banner"
-        app:layout_constraintHeight_percent="@dimen/logo_dimens_percent_lg"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/margin_vertical_xl"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvManageProfile"
-        android:layout_width="0dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_marginHorizontal="@dimen/margin_horizontal_md"
-        app:cardCornerRadius="30dp"
-
+        android:layout_marginTop="@dimen/margin_vertical_xl"
+        app:boxBackgroundColor="@color/white"
+        app:boxCornerRadiusBottomEnd="@dimen/til_radius"
+        app:boxCornerRadiusBottomStart="@dimen/til_radius"
+        app:boxCornerRadiusTopEnd="@dimen/til_radius"
+        app:boxCornerRadiusTopStart="@dimen/til_radius"
+        app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSettingsLogo">
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/etEditName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="text"
+            android:textSize="@dimen/et_text_size_md" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_horizontal_md"
-                android:layout_marginVertical="@dimen/margin_vertical_sm"
-                android:text="Manage Profile"
-                android:textColor="@color/black"
-                android:textSize="@dimen/et_text_size_lg"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/baseline_keyboard_arrow_right_24"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvChangePassword"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal_md"
-        app:cardCornerRadius="30dp"
+        android:layout_marginTop="@dimen/margin_vertical_md"
+        android:background="@drawable/button_bg"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textSize="@dimen/et_text_size_sm"
+        app:layout_constraintWidth_percent="0.30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cvManageProfile">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_horizontal_md"
-                android:layout_marginVertical="@dimen/margin_vertical_sm"
-                android:text="Change Password"
-                android:textColor="@color/black"
-                android:textSize="@dimen/et_text_size_lg"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/baseline_keyboard_arrow_right_24"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@id/tilEditName" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvSignOut"
