@@ -8,13 +8,7 @@ import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -30,17 +24,9 @@ import com.enigma.parapo.R
 import com.enigma.parapo.adapters.LocationRecyclerViewAdapter
 import com.enigma.parapo.databinding.FragmentMapBinding
 import com.enigma.parapo.models.IndividualLocation
-import com.enigma.parapo.utils.LinearLayoutManagerWithSmoothScroller
-import com.enigma.parapo.utils.dpToPx
-import com.enigma.parapo.utils.isPermissionGranted
-import com.enigma.parapo.utils.shareIntent
-import com.enigma.parapo.utils.userDistanceTo
+import com.enigma.parapo.utils.*
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsResponse
-import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.android.gestures.MoveGestureDetector
@@ -57,13 +43,7 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.maps.BuildConfig
-import com.mapbox.maps.CameraOptions
-import com.mapbox.maps.EdgeInsets
-import com.mapbox.maps.MapView
-import com.mapbox.maps.RenderedQueryGeometry
-import com.mapbox.maps.RenderedQueryOptions
-import com.mapbox.maps.Style
+import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.eq
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.get
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.literal
@@ -554,7 +534,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 val payloadGeometry = payload[1] as Point
 
                 // Set selected terminal
-                setFeatureSelectState(featureCollection.features()!![prevSelectedIndex], false)
                 setSelected(payloadIndex)
                 repositionMapCamera(payloadGeometry)
 
@@ -724,9 +703,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 }
                             }
                         }
-
-                    } else {
-                        setFeatureSelectState(featureList[i], false)
                     }
                 }
 
@@ -795,8 +771,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 if (!featureSelectStatus(i)) {
                     setSelected(i)
                 }
-            } else {
-                setFeatureSelectState(featureList[i], false)
             }
         }
 
@@ -980,8 +954,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
      * @param index the index of selected feature
      */
     private fun setSelected(index: Int) {
-        val feature = featureCollection.features()!![index]
-        setFeatureSelectState(feature, true)
+        setFeatureSelectState(featureCollection.features()!![prevSelectedIndex], false)
+        setFeatureSelectState(featureCollection.features()!![index], true)
         prevSelectedIndex = index
         refreshTerminalSource()
     }
