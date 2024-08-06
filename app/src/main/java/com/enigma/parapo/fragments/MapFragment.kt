@@ -8,7 +8,13 @@ import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -24,9 +30,17 @@ import com.enigma.parapo.R
 import com.enigma.parapo.adapters.LocationRecyclerViewAdapter
 import com.enigma.parapo.databinding.FragmentMapBinding
 import com.enigma.parapo.models.IndividualLocation
-import com.enigma.parapo.utils.*
+import com.enigma.parapo.utils.LinearLayoutManagerWithSmoothScroller
+import com.enigma.parapo.utils.dpToPx
+import com.enigma.parapo.utils.isPermissionGranted
+import com.enigma.parapo.utils.shareIntent
+import com.enigma.parapo.utils.userDistanceTo
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.android.gestures.MoveGestureDetector
@@ -43,7 +57,13 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
+import com.mapbox.maps.BuildConfig
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapView
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.RenderedQueryOptions
+import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.eq
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.get
 import com.mapbox.maps.extension.style.expressions.generated.Expression.Companion.literal
@@ -303,10 +323,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         val singleLocationFare = singleLocation.getStringProperty("fare")
                         val singleLocationRoute = singleLocation.getStringProperty("route")
 
-
-                        // Add a boolean property to use for adjusting the icon of the selected terminal location
-                        singleLocation.addBooleanProperty(PROPERTY_SELECTED, false)
-
                         // Create a new LineString object
                         var singleLocationRouteLine: LineString? = null
 
@@ -318,12 +334,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         // Get the single location's LngLat coordinates
                         val singleLocationPosition = singleLocation.geometry() as Point?
 
-                        // Create a new LngLat object with the Position object created above
-                        val singleLocationLngLat = Point.fromLngLat(
-                            singleLocationPosition!!.longitude(),
-                            singleLocationPosition.latitude()
-                        )
-
                         // Add the location to the Arraylist of locations for later use in the recyclerview
                         listOfIndividualLocations.add(
                             IndividualLocation(
@@ -332,7 +342,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 singleLocationDropOff,
                                 singleLocationFare,
                                 singleLocationRouteLine,
-                                singleLocationLngLat
+                                singleLocationPosition
                             )
                         )
                     }
@@ -529,13 +539,12 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
 
             override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
-                val payload = item.payload as List<*>
-                val payloadIndex = payload[0] as Int
-                val payloadGeometry = payload[1] as Point
+                val payloadIndex = item.payload as Int
+                val selectedLocation = listOfIndividualLocations[payloadIndex]
 
                 // Set selected terminal
                 setSelected(payloadIndex)
-                repositionMapCamera(payloadGeometry)
+                repositionMapCamera(selectedLocation.location)
 
                 // Show the location card
                 Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
@@ -545,10 +554,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
                 if (deviceHasInternetConnection()) {
                     // Start call to the Mapbox Directions API
-                    getInformationFromDirectionsApi(payloadGeometry, payloadIndex)
+                    getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
 
                     // Start call to the Mapbox Map Matching API if a route exists
-                    val selectedLocation = listOfIndividualLocations[payloadIndex]
                     if (selectedLocation.route != null) {
                         getInformationFromMapMatchingApi(selectedLocation.route)
                     }
@@ -653,7 +661,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             RenderedQueryOptions(listOf("terminal-location-layer-id"), null)
         ) { features ->
             if (!features.value?.isEmpty()!!) {
-                //val name = features[0].getStringProperty("name")
                 val name =
                     features.value?.get(0)?.queriedFeature?.feature?.getStringProperty("name")
                 val featureList = featureCollection.features()
@@ -809,7 +816,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             .removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
         hasOnIndicatorPositionChangedListener = false
         mapView.gestures.removeOnMoveListener(moveListener)
-        focusLocationView.setOnClickListener(null)
         super.onStop()
     }
 
@@ -1291,7 +1297,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         null,
                         null,
                         R.drawable.default_theme_icon,
-                        payload = listOf(index, feature.geometry())
+                        payload = index
                     )
                 )
             }
