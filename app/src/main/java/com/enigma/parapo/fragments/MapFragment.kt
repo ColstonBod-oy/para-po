@@ -323,14 +323,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                         val singleLocationFare = singleLocation.getStringProperty("fare")
                         val singleLocationRoute = singleLocation.getStringProperty("route")
 
-                        // Create a new LineString object
-                        var singleLocationRouteLine: LineString? = null
-
-                        // Generate a LineString from the single location's route coordinates
-                        if (singleLocationRoute.isNotEmpty()) {
-                            singleLocationRouteLine = LineString.fromJson(singleLocationRoute)
-                        }
-
                         // Get the single location's LngLat coordinates
                         val singleLocationPosition = singleLocation.geometry() as Point?
 
@@ -341,7 +333,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                 singleLocationDescription,
                                 singleLocationDropOff,
                                 singleLocationFare,
-                                singleLocationRouteLine,
+                                singleLocationRoute,
                                 singleLocationPosition
                             )
                         )
@@ -557,8 +549,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
 
                     // Start call to the Mapbox Map Matching API if a route exists
-                    if (selectedLocation.route != null) {
-                        getInformationFromMapMatchingApi(selectedLocation.route)
+                    if (selectedLocation.route.isNotEmpty()) {
+                        // Generate a LineString from the selected location's route coordinates
+                        getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
                     }
                 } else {
                     Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
@@ -664,6 +657,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                 val name =
                     features.value?.get(0)?.queriedFeature?.feature?.getStringProperty("name")
                 val featureList = featureCollection.features()
+
                 for (i in featureList!!.indices) {
                     if (featureList[i].getStringProperty("name").equals(name)) {
                         val selectedFeaturePoint = featureList[i].geometry() as Point?
@@ -698,8 +692,13 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                                     )
 
                                     // Start call to the Mapbox Map Matching API if a route exists
-                                    if (listOfIndividualLocations[x].route != null) {
-                                        getInformationFromMapMatchingApi(listOfIndividualLocations[x].route)
+                                    if (listOfIndividualLocations[x].route.isNotEmpty()) {
+                                        // Generate a LineString from the selected location's route coordinates
+                                        getInformationFromMapMatchingApi(
+                                            LineString.fromJson(
+                                                listOfIndividualLocations[x].route
+                                            )
+                                        )
                                     }
                                 } else {
                                     Toast.makeText(
@@ -792,8 +791,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             getInformationFromDirectionsApi(selectedLocationPoint!!, position)
 
             // Start call to the Mapbox Map Matching API if a route exists
-            if (selectedLocation.route != null) {
-                getInformationFromMapMatchingApi(selectedLocation.route)
+            if (selectedLocation.route.isNotEmpty()) {
+                // Generate a LineString from the selected location's route coordinates
+                getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
             }
         } else {
             Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
