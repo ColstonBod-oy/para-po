@@ -42,11 +42,11 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:theme="@style/CustomSearchResultsViewTheme"
         android:clipToPadding="false"
         android:elevation="4dp"
         android:paddingTop="8dp"
         android:paddingBottom="22dp"
+        android:theme="@style/CustomSearchResultsViewTheme"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
@@ -90,5 +90,6 @@
         app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/map_layout_rv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_goneMarginBottom="80dp" />
+        app:layout_goneMarginBottom="80dp"
+        app:tint="@color/colorAccent_default" />
 </androidx.constraintlayout.widget.ConstraintLayout>

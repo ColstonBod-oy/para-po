@@ -131,6 +131,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     // Keeps track of the previously selected terminal index
     private var prevSelectedIndex = 0
 
+    // Keeps track of search category
+    private var searchPlaces = false
+
     private val NAVIGATION_LINE_WIDTH = 9.0
 
     private lateinit var locationProvider: LocationProvider
@@ -197,6 +200,61 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
         mapView.mapboxMap.setCamera(CameraOptions.Builder().center(it).build())
         mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
+    }
+
+    private val searchResultsViewActionListener = object : SearchResultsView.ActionListener {
+        override fun onErrorItemClick(item: SearchResultAdapterItem.Error) {
+            // Not implemented
+        }
+
+        override fun onHistoryItemClick(item: SearchResultAdapterItem.History) {
+            // Not implemented
+        }
+
+        override fun onMissingResultFeedbackClick(item: SearchResultAdapterItem.MissingResultFeedback) {
+            // Not implemented
+        }
+
+        override fun onPopulateQueryClick(item: SearchResultAdapterItem.Result) {
+            // Not implemented
+        }
+
+        override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
+            val payloadIndex = item.payload as Int
+            val selectedLocation = listOfIndividualLocations[payloadIndex]
+
+            // Set selected terminal
+            setSelected(payloadIndex)
+            repositionMapCamera(selectedLocation.location)
+
+            // Show the location card
+            Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
+                .show()
+            locationsRecyclerView.visibility = View.VISIBLE
+            locationsRecyclerView.scrollToPosition(payloadIndex)
+
+            if (deviceHasInternetConnection()) {
+                // Start call to the Mapbox Directions API
+                getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
+
+                // Start call to the Mapbox Map Matching API if a route exists
+                if (selectedLocation.route.isNotEmpty()) {
+                    // Generate a LineString from the selected location's route coordinates
+                    getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
+                } else {
+                    // Remove existing jeepney route line on the map
+                    removeSourceFeatures(
+                        "jeepney-route-source-id",
+                        listOf("jeepney-route-feature-id")
+                    )
+                }
+            } else {
+                Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
+            }
+
+            // Close the search view
+            toolbar.collapseActionView()
+        }
     }
 
     // Shows if onIndicatorPositionChangedListener is added
@@ -340,7 +398,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     }
 
                     // Hide the location cards initially
-                    val chosenTheme = R.style.AppTheme_Default
+                    val chosenTheme = R.style.Theme_Main
                     setUpRecyclerViewOfLocationCards(chosenTheme)
                     locationsRecyclerView.visibility = View.GONE
 
@@ -513,54 +571,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
         })
 
-        searchResultsView.addActionListener(object : SearchResultsView.ActionListener {
-            override fun onErrorItemClick(item: SearchResultAdapterItem.Error) {
-                // Handle error item click
-            }
-
-            override fun onHistoryItemClick(item: SearchResultAdapterItem.History) {
-                // Handle history item click
-            }
-
-            override fun onMissingResultFeedbackClick(item: SearchResultAdapterItem.MissingResultFeedback) {
-                // Handle missing result feedback click
-            }
-
-            override fun onPopulateQueryClick(item: SearchResultAdapterItem.Result) {
-                // Handle populate query click
-            }
-
-            override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
-                val payloadIndex = item.payload as Int
-                val selectedLocation = listOfIndividualLocations[payloadIndex]
-
-                // Set selected terminal
-                setSelected(payloadIndex)
-                repositionMapCamera(selectedLocation.location)
-
-                // Show the location card
-                Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
-                    .show()
-                locationsRecyclerView.visibility = View.VISIBLE
-                locationsRecyclerView.scrollToPosition(payloadIndex)
-
-                if (deviceHasInternetConnection()) {
-                    // Start call to the Mapbox Directions API
-                    getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
-
-                    // Start call to the Mapbox Map Matching API if a route exists
-                    if (selectedLocation.route.isNotEmpty()) {
-                        // Generate a LineString from the selected location's route coordinates
-                        getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
-                    }
-                } else {
-                    Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
-                }
-
-                // Close the search view
-                toolbar.collapseActionView()
-            }
-        })
+        searchResultsView.addActionListener(searchResultsViewActionListener)
 
         searchPlaceView = binding.searchPlaceView
         searchPlaceView.initialize(CommonSearchViewConfiguration(DistanceUnitType.IMPERIAL))
@@ -816,6 +827,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             .removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
         hasOnIndicatorPositionChangedListener = false
         mapView.gestures.removeOnMoveListener(moveListener)
+        searchResultsView.removeActionListener(searchResultsViewActionListener)
         super.onStop()
     }
 
@@ -992,6 +1004,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         searchPlaceListener?.hideNavView()
 
         // Remove route lines and hide the location cards
+        setFeatureSelectState(featureCollection.features()!![prevSelectedIndex], false)
         removeSourceFeatures("navigation-route-source-id", listOf("navigation-route-feature-id"))
         removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
         locationsRecyclerView.visibility = View.GONE
@@ -1255,17 +1268,21 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
 
+        val overflowActionView = menu.findItem(R.id.action_overflow)
+
         val searchActionView = menu.findItem(R.id.action_search)
         searchActionView.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 searchPlaceView.hide()
                 searchResultsView.isVisible = true
+                overflowActionView.isVisible = true
                 toolbar.setBackgroundColor(resources.getColor(R.color.white))
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 searchResultsView.isVisible = false
+                overflowActionView.isVisible = false
                 toolbar.setBackgroundColor(resources.getColor(android.R.color.transparent))
                 return true
             }
@@ -1279,11 +1296,43 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                //searchEngineUiAdapter.search(newText)
-                featureCollectionSearch(newText)
+                if (searchPlaces) {
+                    searchEngineUiAdapter.search(newText)
+                } else {
+                    featureCollectionSearch(newText)
+                }
+
                 return false
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_search_places -> {
+                Toast.makeText(activity, "Searching Places...", Toast.LENGTH_SHORT).show()
+
+                if (!searchPlaces) {
+                    searchPlaces = true
+                    searchResultsView.removeActionListener(searchResultsViewActionListener)
+                }
+
+                true
+            }
+
+            R.id.action_search_terminals -> {
+                Toast.makeText(activity, "Searching Terminals...", Toast.LENGTH_SHORT).show()
+
+                if (searchPlaces) {
+                    searchPlaces = false
+                    searchResultsView.addActionListener(searchResultsViewActionListener)
+                }
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun featureCollectionSearch(query: String) {

@@ -74,7 +74,7 @@ public class LocationRecyclerViewAdapter extends
         card.dropOffTextView.setText(locationCard.getDropOff());
         card.distanceNumberTextView.setText(locationCard.getDistance());
 
-        if (selectedTheme == R.style.AppTheme_Default) {
+        if (selectedTheme == R.style.Theme_Main) {
             emojiForCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_theme_icon, null);
             backgroundCircle = ResourcesCompat.getDrawable(context.getResources(), R.drawable.white_circle, null);
             setColors(R.color.colorPrimaryDark_default, R.color.black, R.color.black, R.color.black,

@@ -15,11 +15,4 @@
     <style name="CustomSearchSdkTheme" parent="MapboxSearchSdk.Theme.Light">
         <item name="mapboxSearchSdkBackgroundSecondaryColor">#0075FF</item>
     </style>
-
-    <!-- Default theme -->
-    <style name="AppTheme.Default" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary_default</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_default</item>
-        <item name="colorAccent">@color/colorAccent_default</item>
-    </style>
 </resources>

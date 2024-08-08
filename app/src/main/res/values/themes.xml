@@ -8,4 +8,12 @@
     </style>
 
     <style name="Theme.ParaPo" parent="Base.Theme.ParaPo" />
+
+    <!-- Main activity theme -->
+    <style name="Theme.Main" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary_default</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_default</item>
+        <item name="colorAccent">@color/colorAccent_default</item>
+        <item name="android:itemBackground">@color/itemBackground_default</item>
+    </style>
 </resources>

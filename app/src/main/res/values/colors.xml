@@ -18,7 +18,8 @@
     // Default theme
     <color name="colorPrimary_default">#E8E5E0</color>
     <color name="colorPrimaryDark_default">#E8E5E0</color>
-    <color name="colorAccent_default">#FFFFFF</color>
+    <color name="colorAccent_default">#000000</color>
+    <color name="itemBackground_default">#FFFFFF</color>
     <color name="navigationRouteLine_default">#00BAFF</color>
     <color name="jeepneyRouteLine_default">#FF5C00</color>
     <color name="cardDropOffAndFareTextColor_default">#000000</color>
