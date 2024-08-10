@@ -221,36 +221,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
         override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
             val payloadIndex = item.payload as Int
-            val selectedLocation = listOfIndividualLocations[payloadIndex]
+            displayRoutes(payloadIndex)
 
-            // Set selected terminal
-            setSelected(payloadIndex)
-            repositionMapCamera(selectedLocation.location)
-
-            // Show the location card
-            Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
-                .show()
-            locationsRecyclerView.visibility = View.VISIBLE
-            locationsRecyclerView.scrollToPosition(payloadIndex)
-
-            if (deviceHasInternetConnection()) {
-                // Start call to the Mapbox Directions API
-                getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
-
-                // Start call to the Mapbox Map Matching API if a route exists
-                if (selectedLocation.route.isNotEmpty()) {
-                    // Generate a LineString from the selected location's route coordinates
-                    getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
-                } else {
-                    // Remove existing jeepney route line on the map
-                    removeSourceFeatures(
-                        "jeepney-route-source-id",
-                        listOf("jeepney-route-feature-id")
-                    )
-                }
-            } else {
-                Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
-            }
+            // Remove existing markers
+            mapMarkersManager.clearMarkers()
 
             // Close the search view
             toolbar.collapseActionView()
@@ -597,7 +571,48 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         searchPlaceView.addOnNavigateClickListener { searchPlace ->
             trackUserLocation()
             updateUserLocation()
-            navigateToSearchCoordinate(searchPlace.coordinate)
+
+            // THIS IS A HACK, FIX THIS LATER
+            // Shows the appropriate jeepney terminal to take
+            // to reach the searched tourist spot
+            val searchPlaceName = searchPlace.name
+
+            when {
+                searchPlaceName == "Mines View Park" || searchPlaceName == "The Mansion" -> {
+                    searchPlaceView.hide()
+                    displayRoutes(4)
+
+                    // Show nav view
+                    searchPlaceListener?.showNavView()
+                }
+
+                searchPlaceName == "Lourdes Grotto" || searchPlaceName.startsWith("Dominican Hill") -> {
+                    searchPlaceView.hide()
+                    displayRoutes(0)
+                    searchPlaceListener?.showNavView()
+                }
+
+                searchPlaceName.startsWith("Camp John Hay") -> {
+                    searchPlaceView.hide()
+                    displayRoutes(5)
+                    searchPlaceListener?.showNavView()
+                }
+
+                searchPlaceName.startsWith("PMA") -> {
+                    searchPlaceView.hide()
+                    displayRoutes(7)
+                    searchPlaceListener?.showNavView()
+                }
+
+                else -> {
+                    Toast.makeText(
+                        activity, "Failed to get appropriate jeepney terminal",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navigateToSearchCoordinate(searchPlace.coordinate)
+                }
+            }
+
             //startActivity(geoIntent(searchPlace.coordinate))
         }
 
@@ -739,6 +754,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     listOf("navigation-route-feature-id")
                 )
                 removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
+                mapMarkersManager.clearMarkers()
                 locationsRecyclerView.visibility = View.GONE
             }
         }
@@ -773,7 +789,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
      * @param position the clicked card's position/index in the overall list of cards
      */
     override fun onItemClick(position: Int) {
-        // Remove existing jeepney route line on the map
+        // Remove existing markers and jeepney route line on the map
+        mapMarkersManager.clearMarkers()
         removeSourceFeatures("jeepney-route-source-id", listOf("jeepney-route-feature-id"))
 
         // Get the selected individual location via its card's position in the recyclerview of cards
@@ -781,8 +798,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
         // Evaluate each Feature's "select state" to appropriately style the location's icon
         val featureList = featureCollection.features()
-        val selectedLocationPoint = featureCollection.features()!![position].geometry() as Point?
-        for (i in featureList!!.indices) {
+        val selectedLocationPoint = featureList!![position].geometry() as Point?
+        for (i in featureList.indices) {
             if (featureList[i].getStringProperty("name") == selectedLocation.name
             ) {
                 if (!featureSelectStatus(i)) {
@@ -1071,6 +1088,39 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
                     .show()
             }
         })
+    }
+
+    private fun displayRoutes(payloadIndex: Int) {
+        val selectedLocation = listOfIndividualLocations[payloadIndex]
+
+        // Set selected terminal
+        setSelected(payloadIndex)
+        repositionMapCamera(selectedLocation.location)
+
+        // Show the location card
+        Toast.makeText(activity, "Click on a card", Toast.LENGTH_SHORT)
+            .show()
+        locationsRecyclerView.visibility = View.VISIBLE
+        locationsRecyclerView.scrollToPosition(payloadIndex)
+
+        if (deviceHasInternetConnection()) {
+            // Start call to the Mapbox Directions API
+            getInformationFromDirectionsApi(selectedLocation.location, payloadIndex)
+
+            // Start call to the Mapbox Map Matching API if a route exists
+            if (selectedLocation.route.isNotEmpty()) {
+                // Generate a LineString from the selected location's route coordinates
+                getInformationFromMapMatchingApi(LineString.fromJson(selectedLocation.route))
+            } else {
+                // Remove existing jeepney route line on the map
+                removeSourceFeatures(
+                    "jeepney-route-source-id",
+                    listOf("jeepney-route-feature-id")
+                )
+            }
+        } else {
+            Toast.makeText(activity, R.string.no_internet_message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun updateUserLocation() {
