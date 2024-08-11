@@ -569,9 +569,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         }
 
         searchPlaceView.addOnNavigateClickListener { searchPlace ->
-            trackUserLocation()
-            updateUserLocation()
-
             // THIS IS A HACK, FIX THIS LATER
             // Shows the appropriate jeepney terminal to take
             // to reach the searched tourist spot
@@ -1178,6 +1175,9 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     private fun navigateToSearchCoordinate(destinationPoint: Point) {
+        updateUserLocation()
+        repositionMapCamera(destinationPoint)
+
         val routeOptions: RouteOptions =
             RouteOptions.builder().applyDefaultNavigationOptions()
                 .profile(DirectionsCriteria.PROFILE_DRIVING)
