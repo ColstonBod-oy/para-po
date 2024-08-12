@@ -85,12 +85,11 @@ import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.gestures.gestures
-import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
-import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.plugin.viewport.ViewportStatus
 import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.navigation.base.extensions.applyDefaultNavigationOptions
 import com.mapbox.search.ApiType
@@ -192,16 +191,6 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     // Instance of the listener
     private var searchPlaceListener: OnSearchPlaceListener? = null
 
-    // Get the user's location as coordinates
-    private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
-        mapView.mapboxMap.setCamera(CameraOptions.Builder().bearing(it).build())
-    }
-
-    private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
-        mapView.mapboxMap.setCamera(CameraOptions.Builder().center(it).build())
-        mapView.gestures.focalPoint = mapView.mapboxMap.pixelForCoordinate(it)
-    }
-
     private val searchResultsViewActionListener = object : SearchResultsView.ActionListener {
         override fun onErrorItemClick(item: SearchResultAdapterItem.Error) {
             // Not implemented
@@ -236,16 +225,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         }
     }
 
-    // Shows if onIndicatorPositionChangedListener is added
-    private var hasOnIndicatorPositionChangedListener = false
-
-    // Removes the onIndicatorPositionChangedListener and hides the focus location button when the map is moved
+    // Removes user location tracking and hides the focus location button when the map is moved
     private val moveListener: OnMoveListener = object : OnMoveListener {
         override fun onMoveBegin(detector: MoveGestureDetector) {
-            if (hasOnIndicatorPositionChangedListener) {
-                mapView.location
-                    .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-                hasOnIndicatorPositionChangedListener = false
+            if (mapView.viewport.status != ViewportStatus.Idle) {
+                mapView.viewport.idle()
             }
         }
 
@@ -445,6 +429,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         // and location provider is initialized
         if (requireActivity().isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
             showUserLocation()
+            trackUserLocation()
             updateUserLocation()
         }
 
@@ -634,13 +619,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
         focusLocationView = binding.focusLocation
         focusLocationView.hide()
 
-        // Adds the onIndicatorPositionChangedListener and zooms in
+        // Adds user location tracking and zooms in
         // when the focus location button is clicked then hides the button
         focusLocationView.setOnClickListener {
-            if (!hasOnIndicatorPositionChangedListener) {
-                mapView.location
-                    .addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-                hasOnIndicatorPositionChangedListener = true
+            if (mapView.viewport.status == ViewportStatus.Idle) {
+                trackUserLocation()
             }
 
             focusLocationView.hide()
@@ -662,6 +645,8 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissions granted, proceed with showing the user location
                 showUserLocation()
+                trackUserLocation()
+                updateUserLocation()
             } else {
                 // Permissions denied, show toast message
                 Toast.makeText(
@@ -769,12 +754,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             location.enabled = true
             location.pulsingEnabled = true
             location.puckBearing = PuckBearing.COURSE
-            location.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-            location.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-            hasOnIndicatorPositionChangedListener = true
         }
-
-        trackUserLocation()
     }
 
     private fun trackUserLocation() {
@@ -832,19 +812,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
     override fun onStart() {
         super.onStart()
-        mapView.location
-            .addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-        mapView.location
-            .addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-        hasOnIndicatorPositionChangedListener = true
+        trackUserLocation()
     }
 
     override fun onStop() {
-        mapView.location
-            .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-        mapView.location
-            .removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
-        hasOnIndicatorPositionChangedListener = false
+        mapView.viewport.cleanup()
         mapView.gestures.removeOnMoveListener(moveListener)
         searchResultsView.removeActionListener(searchResultsViewActionListener)
         super.onStop()
@@ -1223,11 +1195,10 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
     }
 
     private fun repositionMapCamera(newTarget: Point) {
-        if (hasOnIndicatorPositionChangedListener) {
-            mapView.location
-                .removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
-            hasOnIndicatorPositionChangedListener = false
+        if (mapView.viewport.status != ViewportStatus.Idle) {
+            mapView.viewport.idle()
         }
+
         mapView.mapboxMap.setCamera(CameraOptions.Builder().center(newTarget).build())
 
         mapView.camera.apply {
