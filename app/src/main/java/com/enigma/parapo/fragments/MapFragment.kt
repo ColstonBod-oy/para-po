@@ -221,6 +221,11 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
 
         override fun onResultItemClick(item: SearchResultAdapterItem.Result) {
             val payloadIndex = item.payload as Int
+
+            // Remove user location tracking
+            mapView.viewport.idle()
+
+            // Display navigation and jeepney routes
             displayRoutes(payloadIndex)
 
             // Remove existing markers
