@@ -16,6 +16,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvMainName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical_sm"
+        android:text="Your Name"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/et_text_size_xl"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilEditName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -32,14 +45,15 @@
         app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circleImageView">
+        app:layout_constraintTop_toBottomOf="@+id/tvMainName">
 
         <EditText
             android:id="@+id/etEditName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="New username"
             android:inputType="text"
+            android:maxLength="15"
             android:textSize="@dimen/et_text_size_md" />
     </com.google.android.material.textfield.TextInputLayout>
 

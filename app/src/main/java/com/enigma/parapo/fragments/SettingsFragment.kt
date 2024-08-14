@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.enigma.parapo.activities.GetStartedActivity
 import com.enigma.parapo.contants.Constants
 import com.enigma.parapo.databinding.FragmentSettingsBinding
 import com.enigma.parapo.firebase.FireStoreClass
+import com.enigma.parapo.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,9 +41,47 @@ class SettingsFragment : Fragment() {
             requireActivity().finish()
         }
 
+        binding.btnSave.setOnClickListener {
+            val newUsername = binding.etEditName.text.toString().trim()
+
+            if (newUsername.isNotEmpty()) {
+                val mFireStore = FirebaseFirestore.getInstance()
+                mFireStore.collection(Constants.USERS).document(FireStoreClass().getCurrentUserId())
+                    .update("name", newUsername)
+                    .addOnSuccessListener {
+                        setName()
+                        binding.tilEditName.error = null
+                        Toast.makeText(requireContext(), "Username updated", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    .addOnFailureListener { e ->
+                        binding.tilEditName.error = null
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update username: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } else {
+                binding.tilEditName.error = "Enter new username"
+            }
+        }
+
+        setName()
         setProfilePic()
 
         return view
+    }
+
+    private fun setName() {
+        val mFireStore = FirebaseFirestore.getInstance()
+        mFireStore.collection(Constants.USERS).document(FireStoreClass().getCurrentUserId()).get()
+            .addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user != null && _binding != null) {
+                    binding.tvMainName.text = user.name
+                }
+            }
     }
 
     private fun setProfilePic() {

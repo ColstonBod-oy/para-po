@@ -8,6 +8,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.enigma.parapo.R
+import com.enigma.parapo.contants.Constants
 import com.enigma.parapo.databinding.ActivitySignInBinding
 import com.enigma.parapo.firebase.FireStoreClass
 import com.enigma.parapo.models.User
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AuthBaseActivity() {
@@ -105,11 +107,21 @@ class SignInActivity : AuthBaseActivity() {
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 val id = FireStoreClass().getCurrentUserId()
-                val name = account.displayName.toString()
-                val email = account.email.toString()
-                val image = account.photoUrl.toString()
-                val userInfo = User(id, name, email, image)
-                FireStoreClass().registerUser(userInfo)
+
+                // Check if the user already exists in Firestore
+                val mFireStore = FirebaseFirestore.getInstance()
+                mFireStore.collection(Constants.USERS).document(id).get()
+                    .addOnSuccessListener { document ->
+                        if (!document.exists()) {
+                            // User does not exist, register it
+                            val name = account.displayName.toString()
+                            val email = account.email.toString()
+                            val image = account.photoUrl.toString()
+                            val userInfo = User(id, name, email, image)
+                            FireStoreClass().registerUser(userInfo)
+                        }
+                    }
+
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
