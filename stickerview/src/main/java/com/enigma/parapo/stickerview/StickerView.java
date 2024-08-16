@@ -2,13 +2,20 @@ package com.enigma.parapo.stickerview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -798,6 +805,10 @@ public class StickerView extends FrameLayout {
         Canvas canvas = new Canvas(bitmap);
         this.draw(canvas);
         return bitmap;
+    }
+
+    public List<Sticker> getStickers() {
+        return stickers;
     }
 
     public int getStickerCount() {

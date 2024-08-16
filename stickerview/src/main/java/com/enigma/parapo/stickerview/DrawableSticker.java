@@ -3,12 +3,14 @@ package com.enigma.parapo.stickerview;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 
 public class DrawableSticker extends Sticker {
 
     private Drawable drawable;
+    private int resId;
     private Rect realBounds;
 
     public DrawableSticker(Drawable drawable) {
@@ -26,6 +28,14 @@ public class DrawableSticker extends Sticker {
     public DrawableSticker setDrawable(@NonNull Drawable drawable) {
         this.drawable = drawable;
         return this;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(@NonNull int resId) {
+        this.resId = resId;
     }
 
     @Override

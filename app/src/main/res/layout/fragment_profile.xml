@@ -14,9 +14,9 @@
         android:layout_marginBottom="@dimen/margin_vertical_md"
         android:gravity="center_vertical"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/sticker_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/sticker_view">
+        app:layout_constraintStart_toStartOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/mainProfilePic"
@@ -46,16 +46,17 @@
         android:id="@+id/sticker_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_marginHorizontal="@dimen/margin_horizontal_md"
         android:layout_marginBottom="@dimen/margin_vertical_md"
-        android:layout_gravity="center"
         android:layout_weight="1"
-        app:showBorder="true"
-        app:showIcons="true"
-        app:layout_constraintHeight_percent="0.40"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/btnEdit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.40"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnEdit">
+        app:showBorder="true"
+        app:showIcons="true">
 
         <ImageView
             android:layout_width="match_parent"
@@ -67,24 +68,26 @@
         android:id="@+id/btnEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_bg"
         android:layout_marginBottom="@dimen/margin_vertical_md"
+        android:background="@drawable/button_bg"
         android:text="Edit"
         android:textColor="@color/white"
         android:textSize="@dimen/et_text_size_sm"
-        app:layout_constraintWidth_percent="0.30"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/skins"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/skins" />
+        app:layout_constraintWidth_percent="0.30" />
 
     <HorizontalScrollView
         android:id="@+id/skins"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_vertical_md"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/stickers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/stickers">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -95,65 +98,65 @@
                 android:id="@+id/skin1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin1"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin1" />
 
             <ImageView
                 android:id="@+id/skin2"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin2"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin2" />
 
             <ImageView
                 android:id="@+id/skin3"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin3"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin3" />
 
             <ImageView
                 android:id="@+id/skin4"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin4"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin4" />
 
             <ImageView
                 android:id="@+id/skin5"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin5"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin5" />
 
             <ImageView
                 android:id="@+id/skin6"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin6"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin6" />
 
             <ImageView
                 android:id="@+id/skin7"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin7"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin7" />
 
             <ImageView
                 android:id="@+id/skin8"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/skin8"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/skin8" />
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -162,9 +165,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="75dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -175,41 +179,41 @@
                 android:id="@+id/sticker1"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/sticker1"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/sticker1" />
 
             <ImageView
                 android:id="@+id/sticker2"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/sticker2"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/sticker2" />
 
             <ImageView
                 android:id="@+id/sticker3"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/sticker3"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/sticker3" />
 
             <ImageView
                 android:id="@+id/sticker4"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/sticker4"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/sticker4" />
 
             <ImageView
                 android:id="@+id/sticker5"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal_xs"
                 android:contentDescription="@string/sticker"
-                android:src="@drawable/sticker5"
-                android:layout_marginHorizontal="@dimen/margin_horizontal_xs" />
+                android:src="@drawable/sticker5" />
         </LinearLayout>
     </HorizontalScrollView>
 

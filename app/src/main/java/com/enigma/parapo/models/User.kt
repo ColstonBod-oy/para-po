@@ -8,12 +8,16 @@ data class User(
     val name: String? = "",
     val email: String? = "",
     val image: String? = "profilephoto/profilepic1.png",
+    val skin: Int = 0,
+    val stickers: ArrayList<Map<String, Any?>> = arrayListOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readInt(),
+        parcel.readArrayList(Map::class.java.classLoader) as ArrayList<Map<String, Any?>>
     ) {
     }
 
@@ -22,6 +26,8 @@ data class User(
         parcel.writeString(name)
         parcel.writeString(email)
         parcel.writeString(image)
+        parcel.writeInt(skin)
+        parcel.writeList(stickers)
     }
 
     override fun describeContents(): Int {
