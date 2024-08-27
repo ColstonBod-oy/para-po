@@ -565,7 +565,7 @@ class MapFragment : Fragment(), LocationRecyclerViewAdapter.ClickListener {
             val searchPlaceName = searchPlace.name
 
             when {
-                searchPlaceName == "Mines View Park" || searchPlaceName == "The Mansion" -> {
+                searchPlaceName == "Mines View Park" || searchPlaceName == "The Mansion" || searchPlaceName == "Baguio Botanical Garden" -> {
                     searchPlaceView.hide()
                     displayRoutes(4)
 
